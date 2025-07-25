@@ -1,0 +1,27 @@
+﻿exception_id,exception_type,exception_description,mitigant,mitigant_description,mitigant_outcome
+CP.EX.1,material,The policy doesn’t apply to specific geographies,FALSE,n/a,n/a
+CP.EX.2,material,The policy doesn’t apply if the client has a  credible transition plan or if the financing is categorised as transition finance,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.,no exception
+CP.EX.3,material,The policy doesn’t apply if the financing is ringfenced for sustainable activities or if the bank commits to obtain guarantees from clients that the financing will not be used for activities in scope of the policy,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.,no exception
+CP.EX.4,material,The policy doesn’t apply to expansionary activities where the expansion doesn’t result in a net increase in capacity or when it replaces existing capacity,FALSE,n/a,n/a
+CP.EX.5,material,The policy doesn’t apply if the financing doesn’t result in an increase in exposure,FALSE,n/a,n/a
+CP.EX.6,material,The policy applies to new assets but not to the expansion of existing assets,FALSE,n/a,n/a
+CP.EX.7,material,The bank's policy for companies expanding coal power and mining applies at client level but not at group level,FALSE,n/a,n/a
+CP.EX.8,material,"The policy doesn’t apply to a specific category of clients, such as new clients and State-Owned Enterprises",FALSE,n/a,n/a
+CP.EX.9,material,The policy doesn’t apply if expansion results from a merger or acquisition,TRUE,The bank requires that the buyer commits to retiring the acquired assets early in line with a net-zero pathway.,no exception
+CP.EX.10,material,The relative corporate finance threshold is between 30% (exclusive) and 50% (inclusive),TRUE,The bank has implemented a ratchet mechanism whereby the threshold decreases over time. ,technical exception
+CP.EX.11,material,"The policy doesn’t include a relative corporate financing threshold or the threshold is above 50%, and the bank will implement a ratchet mechanism",FALSE,n/a,n/a
+CP.EX.12,technical,Using revenue instead of coal share of power production as metric for relative corporate threshold,FALSE,n/a,n/a
+CP.EX.13,technical,The policy doesn’t apply if the financing is for projects related to the modernisation/abatement of coal-fired power plants or exclusively to abated plants.,FALSE,n/a,n/a
+CP.EX.14,technical,"The policy doesn’t apply if the development of an asset in scope of the policy has already been announced, is under permitting stage, has received final investment decision, or a contract has been signed",FALSE,n/a,n/a
+CP.EX.15,technical,"The policy doesn’t apply to small assets (e.g. 300MW), captive power plants, or companies below a certain size",FALSE,n/a,n/a
+CP.EX.16,technical,The policy doesn’t apply to dedicated industrial plants where there is no cost-efficient alternative,FALSE,n/a,n/a
+CP.EX.17,technical,The policy doesn’t apply to coal power plants used as back-up capacity,FALSE,n/a,n/a
+CP.EX.18,technical,"The policy applies to ""majority owners"" only",FALSE,n/a,n/a
+CP.EX.19,technical,The policy is enforced more than one year after it is announced (only applicable in the year the policy was announced),FALSE,n/a,n/a
+CP.EX.20,technical,The relative corporate finance threshold is between 10% (exclusive) and 30% (inclusive),TRUE,The bank has implemented a ratchet mechanism whereby the threshold decreases over time.,no exception
+CP.EX.21,technical,The policy only applies to infrastructure solely dedicated to relevant coal assets,FALSE,n/a,n/a
+CP.EX.22,material,"For products and services criteria, lending and capital markets are only covered for certain aspects of the bank's policy",FALSE,n/a,n/a
+CP.EX.23,material,The bank sets a threshold above zero for what it considers expansion.,FALSE,n/a,n/a
+CP.EX.24,technical,The policy does not apply if companies are required to keep coal mines or power plants open by law. ,FALSE,n/a,n/a
+CP.EX.25,technical,The policy only applies to medium- or long-term transactions,FALSE,n/a,n/a
+CP.EX.26,material,"The policy gives the bank discretion to continue financing projects or companies ""by exception"", where the exception itself is undefined",FALSE,n/a,n/a
