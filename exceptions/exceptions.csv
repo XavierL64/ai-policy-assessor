@@ -1,4 +1,4 @@
-﻿exception_id,exception_type,exception_description,mitigant,mitigant_description,mitigant_outcome
+﻿exception_id,exception_type,exception_definition,mitigant,mitigant_definition,mitigant_outcome
 CP.EX.1,material,The policy doesn’t apply to specific geographies,FALSE,n/a,n/a
 CP.EX.2,material,The policy doesn’t apply if the client has a  credible transition plan or if the financing is categorised as transition finance,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.,no exception
 CP.EX.3,material,The policy doesn’t apply if the financing is ringfenced for sustainable activities or if the bank commits to obtain guarantees from clients that the financing will not be used for activities in scope of the policy,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.,no exception
