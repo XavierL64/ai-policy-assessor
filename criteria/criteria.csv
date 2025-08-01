@@ -1,4 +1,4 @@
 ﻿criteria_id,criteria_theme,criteria_description,criteria_guidelines,extra_fields,extra_fields_description,extra_fields_guidelines
 CP.1,coal power ,"Does the bank exclude dedicated finance for thermal coal power projects? 
 
-","Exclusion of dedicated finance for new projects or expansions of existing projects. Dedicated finance is equivalent to: project finance, direct finance, use-of-proceeds finance, financing for a specific purpose. ",FALSE,n/a,n/a
+","Exclusion of dedicated finance for new projects or expansions of existing projects. Dedicated finance includes project finance, direct finance, and any financing with a known use of proceeds. It excludes general corporate purpose or client financing unless the funds are explicitly provided for a specific project or activity, in which case it is considered dedicated finance.",FALSE,n/a,n/a
