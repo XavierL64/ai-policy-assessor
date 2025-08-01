@@ -1,6 +1,8 @@
-function_schema = {
+tools = {
+    "type": "function",
     "name": "assess_commitment_exceptions",
-    "description": "Assess whether the policy contains a commitment for the relevant criteria and identify exceptions, including types and mitigation outcomes, based on the exemption taxonomy.",
+    "description": "Assess whether the policy contains a commitment for the relevant criteria and identify any applicable exceptions and their mitigants.",
+    "strict": True,
     "parameters": {
         "type": "object",
         "properties": {
@@ -26,11 +28,6 @@ function_schema = {
                             "type": ["string", "null"],
                             "description": "Short description of the exception if it applies."
                         },
-                        "exception_type": {
-                            "type": "string",
-                            "enum": ["material", "technical"],
-                            "description": "Type assigned to the exception in the exceptions taxonomy."
-                        },
                         "mitigated": {
                             "type": "boolean",
                             "description": "Whether the exception is mitigated, based on mitigants defined in the exceptions taxonomy."
@@ -39,22 +36,19 @@ function_schema = {
                             "type": ["string", "null"],
                             "description": "Short description of the mitigant if the exception is mitigated."
                         },
-                        "final_type": {
-                            "type": "string",
-                            "enum": ["material", "technical", "no exception"],
-                            "description": "Final type after considering mitigation, based on the mitigant outcome defined in the exceptions taxonomy."
-                        }
                     },
                     "required": [
                         "exception_id",
                         "applies",
-                        "exception_type",
+                        "description",
                         "mitigated",
-                        "final_type"
-                    ]
+                        "mitigant"
+                    ],
+                    "additionalProperties": False
                 }
             }
         },
-        "required": ["commitment", "exceptions"]
+        "required": ["commitment", "exceptions"],
+        "additionalProperties": False
     }
 }
