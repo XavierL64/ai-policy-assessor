@@ -1,12 +1,12 @@
 ### ABN Amro ###
 
-policy_extract_abn = """
+POLICY_EXTRACT_ABN = """
 ABN AMRO will not knowingly provide financial products or services1 that directly facilitate:
 […]
 New coal-fired power plants.
 """
 
-assessment_abn = {
+ASSESSMENT_ABN = {
     "commitment": True,
     "exceptions": [
         {
@@ -196,7 +196,7 @@ assessment_abn = {
 
 ### HSBC ###
 
-policy_extract_hsbc = """
+POLICY_EXTRACT_HSBC = """
 HSBC will not provide new finance, or new advisory services, for the specific purposes of activities that do not align with HSBC’s Phase Out Commitment timelines as outlined below:
 creation of new thermal coal assets; thermal coal expansion; extensions to the unabated operating lifetime of existing thermal coal assets; new captive thermal coal-fired power plants or new captive thermal coal mines; thermal coal assets or metallurgical coal mines operating in environmentally and socially critical areas or using Mountaintop Removal (including clients who derive more than 30% of their annual revenues from Mountaintop Removal coal mining).
 
@@ -222,7 +222,7 @@ The terms thermal coal mines and new thermal coal mines do not include exempted 
 [p 8-10; Thermal Coal Phase-out Policy (Feb 2025); https://www.hsbc.com/-/files/hsbc/our-approach/risk-and-responsibility/pdfs/250219-hsbc-thermal-coal-phase-out-policy.pdf?download=1]
 """
 
-assessment_hsbc = {
+ASSESSMENT_HSBC = {
     "commitment": True,
     "exceptions": [
         {

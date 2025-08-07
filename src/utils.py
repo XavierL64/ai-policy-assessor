@@ -19,8 +19,6 @@ def load_criteria(criteria_id, csv_path):
     """
     df = pd.read_csv(csv_path, encoding='utf-8')
     criteria = df[df['criteria_id'] == criteria_id]
-    criteria_description = criteria['criteria_description']
-    criteria_guidelines = criteria['criteria_guidelines']
 
     return {
         'criteria_description': criteria['criteria_description'].iloc[0],
