@@ -11,3 +11,6 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# local environment variables
+.env

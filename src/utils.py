@@ -24,7 +24,18 @@ def load_criteria(criteria_id, csv_path):
         'criteria_description': criteria['criteria_description'].iloc[0],
         'criteria_guidelines': criteria['criteria_guidelines'].iloc[0]
     }
-   
 
-
-
+def filter_exceptions(data):
+    """
+    Takes a dict with 'commitment' and 'exceptions' keys,
+    and returns a dict with commitment and only the exceptions where 'applies' is True.
+    """
+    commitment = data.get("commitment", False)
+    exceptions = data.get("exceptions", [])
+    
+    filtered_exceptions = []
+    for e in exceptions:
+        if e.get("applies") == True:
+            filtered_exceptions.append(e)
+    
+    return {"commitment": commitment, "exceptions": filtered_exceptions}
