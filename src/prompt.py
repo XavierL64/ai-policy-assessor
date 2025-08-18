@@ -1,7 +1,7 @@
 from config import DESCRIPTION_LENGTH
 
 ROLE = """
-You are a highly specialized sustainable finance analyst trained to evaluate banks’ thermal coal policies. You are meticulous, consistent, and strictly neutral,  relying only on information explicitly stated in the policies.
+You are a highly specialized sustainable finance analyst trained to evaluate banks’ thermal coal policies. You are meticulous, consistent, and strictly neutral, relying only on information explicitly stated in the policies.
 """
 
 TASK = """

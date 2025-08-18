@@ -4,7 +4,7 @@ CP.EX.2,material,The policy doesn’t apply if the client has a credible transi
 CP.EX.3,material,The policy doesn’t apply if the financing is ringfenced for sustainable activities or if the bank commits to obtain guarantees from clients that the financing will not be used for activities in scope of the policy,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.,no exception
 CP.EX.4,material,The policy doesn’t apply to expansionary activities where the expansion doesn’t result in a net increase in capacity or when it replaces existing capacity,FALSE,n/a,n/a
 CP.EX.5,material,The policy doesn’t apply if the financing doesn’t result in an increase in exposure,FALSE,n/a,n/a
-CP.EX.6,material,The policy applies to new assets but not to the expansion of existing assets,FALSE,n/a,n/a
+CP.EX.6,material,"The policy applies to new coal power plants, but not to the expansion of existing coal power plants. If the policy only refers to new assets or plants and does not explicitly mention existing assets or plants, then the exception applies.",FALSE,n/a,n/a
 CP.EX.7,material,The bank's policy for companies expanding coal power and mining applies at client level but not at group level,FALSE,n/a,n/a
 CP.EX.8,material,"The policy doesn’t apply to a specific category of clients, such as new clients and State-Owned Enterprises",FALSE,n/a,n/a
 CP.EX.9,material,The policy doesn’t apply if expansion results from a merger or acquisition,TRUE,The bank requires that the buyer commits to retiring the acquired assets early in line with a net-zero pathway.,no exception

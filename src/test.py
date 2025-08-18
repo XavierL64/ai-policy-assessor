@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from utils import load_criteria, load_exceptions, filter_exceptions
 from function_schema import tools
-from assessment_examples import POLICY_EXTRACT_ABN, ASSESSMENT_ABN, POLICY_EXTRACT_HSBC, ASSESSMENT_HSBC, POLICY_EXTRACT_BBVA, ASSESSMENT_BBVA, POLICY_EXTRACT_BARCLAYS
+from assessment_examples import POLICY_EXTRACT_ABN, ASSESSMENT_ABN, POLICY_EXTRACT_HSBC, ASSESSMENT_HSBC, POLICY_EXTRACT_BBVA, ASSESSMENT_BBVA, POLICY_EXTRACT_BARCLAYS, ASSESSMENT_BARCLAYS
 from prompt import ROLE, TASK, INPUTS, STEPS, RULES
 import json
 
@@ -117,11 +117,11 @@ messages = [
     },
     {
         "role": "user",
-        "content": input_abn
+        "content": input_barclays
     },
     {
         "role": "assistant",
-        "content": json.dumps(ASSESSMENT_ABN)
+        "content": json.dumps(ASSESSMENT_BARCLAYS)
     },
     {
         "role": "user",
@@ -133,7 +133,7 @@ messages = [
     },
     {
         "role": "user",
-        "content": input_barclays
+        "content": input_abn
     }
 ]
 

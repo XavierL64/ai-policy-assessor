@@ -1,4 +1,8 @@
 import pandas as pd
+import unicodedata
+import re
+import os
+import fitz
 
 def load_exceptions(csv_path):
     """
@@ -39,3 +43,32 @@ def filter_exceptions(data):
             filtered_exceptions.append(e)
     
     return {"commitment": commitment, "exceptions": filtered_exceptions}
+
+def normalize_text(text):
+    """Basic normalization for verification and matching."""
+    text = unicodedata.normalize("NFKC", text)        # normalize unicode
+    text = re.sub(r"[ \t]+", " ", text)               # collapse spaces/tabs
+    text = re.sub(r"\s*\n\s*", " ", text)             # collapse newlines
+    return text.strip()
+
+def load_pdf_pages(path):
+    """
+    Load a PDF and return a list of pages.
+    Each page is a dict with:
+      - document_name: the PDF file name
+      - page_number: 1-based page number
+      - text: normalized text only (cleaned for verification)
+    """
+    docname = os.path.basename(path)
+    pages = []
+
+    with fitz.open(path) as pdf:
+        for i, page in enumerate(pdf, start=1):
+            raw_text = page.get_text("text") or ""
+            pages.append({
+                "document_name": docname,
+                "page_number": i,
+                "text": normalize_text(raw_text)
+            })
+
+    return pages

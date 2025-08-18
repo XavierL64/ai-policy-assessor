@@ -58,7 +58,42 @@ tools = [
 ]
 
 
-# tools = [
+#         "references": {
+#           "type": "array",
+#           "description": "List of text excerpts from the policy that support the assessment, with location metadata.",
+#           "items": {
+#             "type": "object",
+#             "properties": {
+#               "excerpt": {
+#                 "type": "string",
+#                 "description": "Verbatim excerpt of the relevant policy text."
+#               },
+#               "document_name": {
+#                 "type": "string",
+#                 "description": "The name of the source document (e.g. PDF filename)."
+#               },
+#               "page_start": {
+#                 "type": "integer",
+#                 "description": "The page number where the excerpt starts."
+#               },
+#               "page_end": {
+#                 "type": "integer",
+#                 "description": "The page number where the excerpt ends (same as start if within one page)."
+#               }
+#             },
+#             "required": ["excerpt", "document_name", "page_start", "page_end"],
+#             "additionalProperties": False
+#           }
+#         }
+#       },
+#       "required": ["commitment", "exceptions", "references"],
+#       "additionalProperties": False
+#     }
+#   }
+# }
+
+
+# tools_old_format = [
 #     {
 #         "type": "function",
 #         "name": "assess_commitment_exceptions",

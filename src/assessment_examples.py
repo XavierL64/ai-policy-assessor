@@ -606,3 +606,191 @@ No project finance to enable the construction or material expansion of thermal c
 
 Material expansion: In relation to Thermal Coal Power, production refers to an investment to (i) extend the unabated operating lifetime of existing thermal coal power plants including captives or (ii) increase net operational thermal power capacity, including captives, by more than 10% measure from a baseline of maximum capacity for preceding 3 years reported.
 """
+
+ASSESSMENT_BARCLAYS = {
+    "commitment": True,
+    "exceptions": [
+        {
+            "exception_id": "CP.EX1",
+            "applies": False,
+            "description": None,
+            "mitigated": False,
+            "mitigant": None
+        },
+        {
+            "exception_id": "CP.EX2",
+            "applies": False,
+            "description": None,
+            "mitigated": False,
+            "mitigant": None
+        },
+		{
+			"exception_id": "CP.EX3",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+			"exception_id": "CP.EX4",
+			"applies": True,
+			"description": "expansion that doesn't increase production by more than 10%.",
+			"mitigated": False,
+			"mitigant": None
+		},
+		{
+			"exception_id": "CP.EX5",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+		{
+			"exception_id": "CP.EX6",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+		{
+			"exception_id": "CP.EX7",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+		{
+			"exception_id": "CP.EX8",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+		{
+			"exception_id": "CP.EX9",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX10",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX11",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX12",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX13",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX14",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX15",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX16",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX17",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX18",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX19",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX20",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX21",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX22",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX23",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX24",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX25",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX26",
+			"applies": False,
+			"description": None,
+			"mitigated": False,
+			"mitigant": None
+		},
+    ]
+}
