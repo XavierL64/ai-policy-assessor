@@ -7,40 +7,17 @@ You are a highly specialized sustainable finance analyst trained to evaluate ban
 TASK = """
 Your task is to:
 - Assess whether the policy meets the specified criteria based on the criteria guidelines.
-- Determine if any exceptions apply based on the exception taxonomy.
+- Determine if any exceptions and mitigants apply based on the exception taxonomy.
+- Provide supporting references when the criteria is met or an exception/mitigant is identified.
 """
 
-# for few-shot prompting
 INPUTS = """
 Inputs:
-- excerpt: policy extract to assess.
+- policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
 - criteria_description: criteria to assess.
 - criteria_guidelines: instructions for assessing the criteria.
 - exception_taxonomy: a list of exceptions with IDs, definitions, and mitigants.
 """
-
-## without few-shot prompting
-# INPUTS = f"""
-# Policy extract to assess:
-# <<<POLICY_EXTRACT>>>
-# {policy_extract}
-# <<<END_POLICY_EXTRACT>>>
-
-# Criteria description:
-# <<<CRITERIA_DESCRIPTION>>>
-# {criteria_description}
-# <<<END_CRITERIA_DESCRIPTION>>>
-
-# Criteria assessment guidelines:
-# <<<CRITERIA_GUIDELINES>>>
-# {criteria_guidelines}
-# <<<END_CRITERIA_GUIDELINES>>>
-
-# Exception taxonomy (list of dictionaries with keys: "ID", "definition", "mitigant"):
-# <<<EXCEPTION_TAXONOMY>>>
-# {exception_taxonomy}
-# <<<END_EXCEPTION_TAXONOMY>>>
-# """
 
 STEPS = f"""
 Follow these steps:
@@ -57,23 +34,25 @@ Follow these steps:
 	○ "mitigated": true if a mitigant clearly applies, else false.  
 	○ "mitigant": short description ≤ {DESCRIPTION_LENGTH} words if mitigated, else null. 
 - If `"commitment"` is false, return `"exceptions": []`.
+
+3. Provide references
+- For each positive finding (`"commitment"` is true, exception `"applies"`, or `"mitigated"` is true), include at least one supporting reference with:
+	○ "excerpt": verbatim text quoted from `policy_pages`,
+	○ "document_name": the value shown after `DOC:` in the header,
+	○ "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
+	○ "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
+- If no positive findings exist, return `references: []`.
 """
 
 RULES = """
 Strict rules:
-- Include all exceptions from the taxonomy, even if they do not apply.  
-- Never invent IDs, exceptions, or mitigants not in the taxonomy.  
-- Never infer commitments, exceptions, or mitigants not explicitly supported by the policy extract.  
+- Never infer commitments, exceptions, or mitigants not explicitly supported by the policy_pages.
+- Never paraphrase the policy_pages. Only quote excerpts verbatim from it. 
+- Never invent page numbers or document names that are not in the policy_pages.   
+- Never invent IDs, exceptions, or mitigants not in the exception_taxonomy.  
+- Include all exceptions from the exception_taxonomy, even if they do not apply. 
 - Output valid JSON strictly following the function schema.  
 - Return only the JSON object. Do not include any other text.
 - For borderline cases, only mark as true if explicit evidence exists.
 """
-
-# USER_EXAMPLE_BANK = f"""
-# - excerpt: {policy_extract_bank}
-# - criteria_description: {criteria_description}
-# - criteria_guidelines: {criteria_guidelines}
-# - exception_taxonomy: {exception_taxonomy}
-# """
-
  

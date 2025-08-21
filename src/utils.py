@@ -55,11 +55,11 @@ def load_pdf_pages(path):
     """
     Load a PDF and return a list of pages.
     Each page is a dict with:
-      - document_name: the PDF file name
+      - document_name: the PDF file name (without extension)
       - page_number: 1-based page number
       - text: normalized text only (cleaned for verification)
     """
-    docname = os.path.basename(path)
+    docname = os.path.splitext(os.path.basename(path))[0]
     pages = []
 
     with fitz.open(path) as pdf:
@@ -72,3 +72,40 @@ def load_pdf_pages(path):
             })
 
     return pages
+
+def build_page_pack(pages, max_chars=None):
+    """
+    Concatenate pages into one context string with headers:
+
+    === DOC: <document_name> | PAGE: <n> ===
+    <page_text>
+
+    Args:
+        pages: list of dicts from load_pdf_pages (each has document_name, page_number, text)
+        max_chars: optional int; if set, stop once this many characters have been added
+
+    Returns:
+        str: the concatenated context
+    """
+    parts = []
+    total = 0
+
+    for p in pages:
+        page_text = p.get("text", "") or ""
+        block = f"=== DOC: {p['document_name']} | PAGE: {p['page_number']} ===\n{page_text}\n"
+
+        if max_chars is not None:
+            # Check how many characters we can still add
+            remaining = max_chars - total
+            if remaining <= 0:
+                break
+            if len(block) > remaining:
+                # Truncate this block to fit exactly
+                parts.append(block[:remaining])
+                total += remaining
+                break
+
+        parts.append(block)
+        total += len(block)
+
+    return "".join(parts)
