@@ -9,14 +9,14 @@ criteria_guidelines = criteria['criteria_guidelines']
 criteria_examples = criteria['criteria_examples']
 exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
-pages = load_pdf_pages(r"sources\ABN\Exclusion list (Mar 2021).pdf")
-pages_abn = build_page_pack(pages)
+pages = load_pdf_pages("sources\Barclays\Climate change statement (Feb 2024).pdf")
+pages_barclays = build_page_pack(pages)
 
 # Prepare input for the model
 input_abn= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{pages_abn}
+{POLICY_PAGES_ABN}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:
@@ -97,7 +97,7 @@ Exception taxonomy:
 input_barclays= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{POLICY_PAGES_BARCLAYS}
+{pages_barclays}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:

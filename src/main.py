@@ -22,23 +22,23 @@ messages = [
     },
     {
         "role": "user",
-        "content": input_bbva
+        "content": input_abn
     },
     {
         "role": "assistant",
-        "content": json.dumps(ASSESSMENT_BBVA)
+        "content": json.dumps(ASSESSMENT_ABN)
+    },
+    {
+        "role": "user",
+        "content": input_hsbc
+    },
+    {
+        "role": "assistant",
+        "content": json.dumps(ASSESSMENT_HSBC)
     },
     {
         "role": "user",
         "content": input_barclays
-    },
-    {
-        "role": "assistant",
-        "content": json.dumps(ASSESSMENT_BARCLAYS)
-    },
-    {
-        "role": "user",
-        "content": input_abn
     }
 ]
 
