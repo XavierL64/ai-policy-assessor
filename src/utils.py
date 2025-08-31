@@ -4,17 +4,35 @@ import re
 import os
 import fitz
 
-def load_exceptions(csv_path):
-    """
-    Loads exceptions from a CSV file and returns a list of dictionaries.
-    Cleans non-breaking spaces and converts NaN to None.
-    Each dictionary contains 'exception_id', 'exception_definition', and 'mitigant_definition' for one exception.
-    """
-    df = pd.read_csv(csv_path, encoding='utf-8')
-    df = df.where(pd.notnull(df), None)
-    df = df.map(lambda x: x.replace("\xa0", " ").strip() if isinstance(x, str) else x)
+def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path=None, criteria_id=None):
+      """
+      Loads exceptions with criteria-specific examples.
+      If criteria_id provided, returns only exceptions for that criteria where applies="yes".
+      Cleans non-breaking spaces and converts NaN to None.
+      """
+      # Load base exceptions
+      exceptions_df = pd.read_csv(exceptions_csv_path, encoding='utf-8')
+      exceptions_df = exceptions_df.where(pd.notnull(exceptions_df), None)
+      exceptions_df = exceptions_df.map(lambda x: x.replace("\xa0", " ").strip() if isinstance(x, str) else x)
 
-    return df[["exception_id", "exception_definition", "mitigant_definition"]].to_dict(orient="records")
+      # Load exceptions_criteria mappings if provided
+      if exceptions_criteria_csv_path and criteria_id:
+          exceptions_criteria_df = pd.read_csv(exceptions_criteria_csv_path, encoding='utf-8')
+          exceptions_criteria_df = exceptions_criteria_df.where(pd.notnull(exceptions_criteria_df), None)
+          exceptions_criteria_df = exceptions_criteria_df.map(lambda x: x.replace("\xa0", " ").strip() if isinstance(x, str) else x)
+
+          # Filter for the specific criteria AND where applies="yes"
+          exceptions_criteria_df = exceptions_criteria_df[
+              (exceptions_criteria_df['criteria_id'] == criteria_id) &
+              (exceptions_criteria_df['applies'] == 'yes')
+          ]
+
+          # Join exceptions with exceptions_criteria
+          result = pd.merge(exceptions_df, exceptions_criteria_df, on='exception_id', how='inner')
+          return result[["exception_id", "exception_definition", "mitigant", "mitigant_definition",
+                        "exception_examples", "mitigant_examples"]].to_dict(orient="records")
+
+      return exceptions_df[["exception_id", "exception_definition", "mitigant_definition"]].to_dict(orient="records")
 
 def load_criteria(criteria_id, csv_path):
     """
@@ -26,7 +44,8 @@ def load_criteria(criteria_id, csv_path):
 
     return {
         'criteria_description': criteria['criteria_description'].iloc[0],
-        'criteria_guidelines': criteria['criteria_guidelines'].iloc[0]
+        'criteria_guidelines': criteria['criteria_guidelines'].iloc[0],
+        'criteria_examples': criteria['criteria_examples'].iloc[0]
     }
 
 def filter_exceptions(data):

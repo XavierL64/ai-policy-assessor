@@ -694,8 +694,8 @@ ASSESSMENT_BARCLAYS = {
 		},
         {
 			"exception_id": "CP.EX4",
-			"applies": True,
-			"description": "expansion that doesn't increase production by more than 10%.",
+			"applies": False,
+			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
@@ -827,8 +827,8 @@ ASSESSMENT_BARCLAYS = {
 		},
         {
             "exception_id": "CP.EX23",
-			"applies": False,
-			"description": None,
+			"applies": True,
+			"description": "expansion that doesn't increase production by more than 10%.",
 			"mitigated": False,
 			"mitigant": None
 		},

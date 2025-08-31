@@ -6,7 +6,8 @@ import json
 criteria = load_criteria("CP.1", "criteria/criteria.csv")
 criteria_description = criteria['criteria_description']
 criteria_guidelines = criteria['criteria_guidelines']
-exception_taxonomy = load_exceptions("exceptions/exceptions.csv")
+criteria_examples = criteria['criteria_examples']
+exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
 # Prepare input for the model
 input_abn= f"""
@@ -25,7 +26,12 @@ Criteria assessment guidelines:
 {criteria_guidelines}
 <<<END_CRITERIA_GUIDELINES>>>
 
-Exception taxonomy (list of dictionaries with keys: "ID", "definition", "mitigant"):
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
 {json.dumps(exception_taxonomy)}
 <<<END_EXCEPTION_TAXONOMY>>>
@@ -47,7 +53,12 @@ Criteria assessment guidelines:
 {criteria_guidelines}
 <<<END_CRITERIA_GUIDELINES>>>
 
-Exception taxonomy (list of dictionaries with keys: "ID", "definition", "mitigant"):
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
 {json.dumps(exception_taxonomy)}
 <<<END_EXCEPTION_TAXONOMY>>>
@@ -69,7 +80,12 @@ Criteria assessment guidelines:
 {criteria_guidelines}
 <<<END_CRITERIA_GUIDELINES>>>
 
-Exception taxonomy (list of dictionaries with keys: "ID", "definition", "mitigant"):
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
 {json.dumps(exception_taxonomy)}
 <<<END_EXCEPTION_TAXONOMY>>>
@@ -91,7 +107,12 @@ Criteria assessment guidelines:
 {criteria_guidelines}
 <<<END_CRITERIA_GUIDELINES>>>
 
-Exception taxonomy (list of dictionaries with keys: "ID", "definition", "mitigant"):
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
 {json.dumps(exception_taxonomy)}
 <<<END_EXCEPTION_TAXONOMY>>>

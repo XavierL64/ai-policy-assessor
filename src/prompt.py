@@ -16,7 +16,8 @@ Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
 - criteria_description: criteria to assess.
 - criteria_guidelines: instructions for assessing the criteria.
-- exception_taxonomy: a list of exceptions with IDs, definitions, and mitigants.
+- criteria_examples: examples of evidence that would satisfy the criteria.
+- exception_taxonomy: a list of exceptions with IDs, definitions, mitigants, and examples where available.
 """
 
 STEPS = f"""
@@ -31,7 +32,7 @@ Follow these steps:
 	○ "exception_id": ID from the taxonomy.  
 	○ "applies": true if the exception applies, otherwise false.  
 	○ "description": short description ≤ {DESCRIPTION_LENGTH} words if applies, else null.
-	○ "mitigated": true if a mitigant clearly applies, else false.  
+	○ "mitigated": true if a mitigant clearly applies, else false. Only evaluate if "mitigant" is True.  
 	○ "mitigant": short description ≤ {DESCRIPTION_LENGTH} words if mitigated, else null. 
 - If `"commitment"` is false, return `"exceptions": []`.
 
