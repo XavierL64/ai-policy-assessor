@@ -24,20 +24,6 @@ ASSESSMENT_ABN = {
             "mitigant": None
         },
         {
-            "exception_id": "CP.EX2",
-            "applies": False,
-            "description": None,
-            "mitigated": False,
-            "mitigant": None
-        },
-		{
-			"exception_id": "CP.EX3",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
 			"exception_id": "CP.EX4",
 			"applies": False,
 			"description": None,
@@ -59,42 +45,7 @@ ASSESSMENT_ABN = {
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX7",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
-			"exception_id": "CP.EX8",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
 			"exception_id": "CP.EX9",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX10",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX11",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX12",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -136,21 +87,7 @@ ASSESSMENT_ABN = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX18",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX19",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX20",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -164,28 +101,7 @@ ASSESSMENT_ABN = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX22",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX23",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX24",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX25",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -255,20 +171,6 @@ ASSESSMENT_HSBC = {
             "mitigant": None
         },
         {
-            "exception_id": "CP.EX2",
-            "applies": False,
-            "description": None,
-            "mitigated": False,
-            "mitigant": None
-        },
-		{
-			"exception_id": "CP.EX3",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
 			"exception_id": "CP.EX4",
 			"applies": False,
 			"description": None,
@@ -290,46 +192,11 @@ ASSESSMENT_HSBC = {
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX7",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
-			"exception_id": "CP.EX8",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
 			"exception_id": "CP.EX9",
 			"applies": True,
 			"description": "expansion via corporate mergers and acquisition.",
 			"mitigated": True,
 			"mitigant": "client has confirmed phase-out of these assets will be in line with HSBC’s 2030/40 timelines."
-		},
-        {
-            "exception_id": "CP.EX10",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX11",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX12",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
 		},
         {
             "exception_id": "CP.EX13",
@@ -367,21 +234,7 @@ ASSESSMENT_HSBC = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX18",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX19",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX20",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -395,28 +248,7 @@ ASSESSMENT_HSBC = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX22",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX23",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX24",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX25",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -468,20 +300,6 @@ ASSESSMENT_BBVA = {
             "mitigant": None
         },
         {
-            "exception_id": "CP.EX2",
-            "applies": False,
-            "description": None,
-            "mitigated": False,
-            "mitigant": None
-        },
-		{
-			"exception_id": "CP.EX3",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
 			"exception_id": "CP.EX4",
 			"applies": False,
 			"description": None,
@@ -503,42 +321,7 @@ ASSESSMENT_BBVA = {
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX7",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
-			"exception_id": "CP.EX8",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
 			"exception_id": "CP.EX9",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX10",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX11",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX12",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -580,21 +363,7 @@ ASSESSMENT_BBVA = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX18",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX19",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX20",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -608,28 +377,7 @@ ASSESSMENT_BBVA = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX22",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX23",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX24",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX25",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -679,20 +427,6 @@ ASSESSMENT_BARCLAYS = {
             "mitigant": None
         },
         {
-            "exception_id": "CP.EX2",
-            "applies": False,
-            "description": None,
-            "mitigated": False,
-            "mitigant": None
-        },
-		{
-			"exception_id": "CP.EX3",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
 			"exception_id": "CP.EX4",
 			"applies": False,
 			"description": None,
@@ -714,42 +448,7 @@ ASSESSMENT_BARCLAYS = {
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX7",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
-			"exception_id": "CP.EX8",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-		{
 			"exception_id": "CP.EX9",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX10",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX11",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX12",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -791,21 +490,7 @@ ASSESSMENT_BARCLAYS = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX18",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX19",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX20",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -819,30 +504,9 @@ ASSESSMENT_BARCLAYS = {
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX22",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
             "exception_id": "CP.EX23",
 			"applies": True,
 			"description": "expansion that doesn't increase production by more than 10%.",
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX24",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX25",
-			"applies": False,
-			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},

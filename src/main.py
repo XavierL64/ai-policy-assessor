@@ -22,11 +22,11 @@ messages = [
     },
     {
         "role": "user",
-        "content": input_abn
+        "content": input_bbva
     },
     {
         "role": "assistant",
-        "content": json.dumps(ASSESSMENT_ABN)
+        "content": json.dumps(ASSESSMENT_BBVA)
     },
     {
         "role": "user",
@@ -38,7 +38,7 @@ messages = [
     },
     {
         "role": "user",
-        "content": input_bbva
+        "content": input_abn
     }
 ]
 

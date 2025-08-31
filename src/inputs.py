@@ -1,4 +1,4 @@
-from utils import load_criteria, load_exceptions
+from utils import load_criteria, load_exceptions, load_pdf_pages, build_page_pack
 from assessment_examples import POLICY_EXTRACT_ABN, POLICY_PAGES_ABN, POLICY_EXTRACT_HSBC, POLICY_PAGES_HSBC, POLICY_EXTRACT_BBVA, POLICY_PAGES_BBVA, POLICY_EXTRACT_BARCLAYS, POLICY_PAGES_BARCLAYS
 import json
 
@@ -9,11 +9,14 @@ criteria_guidelines = criteria['criteria_guidelines']
 criteria_examples = criteria['criteria_examples']
 exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
+pages = load_pdf_pages(r"sources\ABN\Exclusion list (Mar 2021).pdf")
+pages_abn = build_page_pack(pages)
+
 # Prepare input for the model
 input_abn= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{POLICY_PAGES_ABN}
+{pages_abn}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:
