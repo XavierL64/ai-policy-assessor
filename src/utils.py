@@ -59,17 +59,17 @@ def load_criteria(criteria_id, csv_path):
 def filter_exceptions(data):
     """
     Takes a dict with 'commitment' and 'exceptions' keys,
-    and returns a dict with commitment and only the exceptions where 'applies' is True.
+    and returns a dict with commitment, exceptions where 'applies' is True, and all references.
     """
     commitment = data.get("commitment", False)
     exceptions = data.get("exceptions", [])
+    references = data.get("references", [])
     
     filtered_exceptions = []
     for e in exceptions:
         if e.get("applies") == True:
             filtered_exceptions.append(e)
-    
-    return {"commitment": commitment, "exceptions": filtered_exceptions}
+    return {"commitment": commitment, "exceptions": filtered_exceptions, "references": references}
 
 def normalize_text(text):
     """Basic normalization for verification and matching."""
@@ -136,3 +136,56 @@ def build_page_pack(pages, max_chars=None):
         total += len(block)
 
     return "".join(parts)
+
+def validate_references(assessment, original_pages):
+    """
+    Validate that extracted references exist and are accurately quoted.
+    
+    Args:
+        assessment: Assessment dict with references
+        original_pages: List of all original page dicts
+    
+    Returns:
+        Assessment dict with validation status added to references
+    """
+    validated_assessment = assessment.copy()
+    
+    for ref in validated_assessment.get('references', []):
+        # Find the source page
+        source_page = find_page_by_reference(
+            original_pages, 
+            ref.get('document_name'), 
+            ref.get('page_start')
+        )
+        
+        if source_page is None:
+            ref['validation_status'] = 'page_not_found'
+            continue
+        
+        # Check if excerpt exists in source text
+        excerpt = ref.get('excerpt', '')
+        source_text = source_page.get('text', '')
+        
+        # Normalize both texts for comparison
+        normalized_excerpt = normalize_text(excerpt)
+        normalized_source = normalize_text(source_text)
+        
+        if normalized_excerpt in normalized_source:
+            ref['validation_status'] = 'verified'
+        else:
+            # Check for partial matches or similar text
+            words_in_excerpt = normalized_excerpt.split()
+            words_in_source = normalized_source.split()
+            
+            # Calculate word overlap
+            overlap = len(set(words_in_excerpt) & set(words_in_source))
+            overlap_ratio = overlap / len(words_in_excerpt) if words_in_excerpt else 0
+            
+            if overlap_ratio > 0.8:
+                ref['validation_status'] = 'partial_match'
+                ref['overlap_ratio'] = overlap_ratio
+            else:
+                ref['validation_status'] = 'needs_review'
+                ref['overlap_ratio'] = overlap_ratio
+    
+    return validated_assessment
