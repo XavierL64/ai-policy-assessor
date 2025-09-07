@@ -9,14 +9,16 @@ criteria_guidelines = criteria['criteria_guidelines']
 criteria_examples = criteria['criteria_examples']
 exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
-pages = load_pdf_pages("sources\Barclays\Climate change statement (Feb 2024).pdf")
-pages_barclays = build_page_pack(pages)
+# Load and prepare policy pages
+pages = load_pdf_pages("sources\Danske Bank\Position Statement on Fossil Fuels (February 2024).pdf")
+policy_pages = build_page_pack(pages)
 
 # Prepare input for the model
+
 input_abn= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{POLICY_PAGES_ABN}
+{policy_pages}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:
@@ -43,7 +45,7 @@ Exception taxonomy:
 input_hsbc= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{POLICY_PAGES_HSBC}
+{policy_pages}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:
@@ -70,7 +72,7 @@ Exception taxonomy:
 input_bbva= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{POLICY_PAGES_BBVA}
+{policy_pages}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:
@@ -97,7 +99,61 @@ Exception taxonomy:
 input_barclays= f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
-{pages_barclays}
+{policy_pages}
+<<<END_POLICY_PAGES>>>
+
+Criteria description:
+<<<CRITERIA_DESCRIPTION>>>
+{criteria_description}
+<<<END_CRITERIA_DESCRIPTION>>>
+
+Criteria assessment guidelines:
+<<<CRITERIA_GUIDELINES>>>
+{criteria_guidelines}
+<<<END_CRITERIA_GUIDELINES>>>
+
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
+<<<EXCEPTION_TAXONOMY>>>
+{json.dumps(exception_taxonomy)}
+<<<END_EXCEPTION_TAXONOMY>>>
+"""
+
+input_ca= f"""
+Policy pages to assess:
+<<<POLICY_PAGES>>>
+{policy_pages}
+<<<END_POLICY_PAGES>>>
+
+Criteria description:
+<<<CRITERIA_DESCRIPTION>>>
+{criteria_description}
+<<<END_CRITERIA_DESCRIPTION>>>
+
+Criteria assessment guidelines:
+<<<CRITERIA_GUIDELINES>>>
+{criteria_guidelines}
+<<<END_CRITERIA_GUIDELINES>>>
+
+Criteria examples:
+<<<CRITERIA_EXAMPLES>>>
+{criteria_examples}
+<<<END_CRITERIA_EXAMPLES>>>
+
+Exception taxonomy:
+<<<EXCEPTION_TAXONOMY>>>
+{json.dumps(exception_taxonomy)}
+<<<END_EXCEPTION_TAXONOMY>>>
+"""
+
+input_danske= f"""
+Policy pages to assess:
+<<<POLICY_PAGES>>>
+{policy_pages}
 <<<END_POLICY_PAGES>>>
 
 Criteria description:

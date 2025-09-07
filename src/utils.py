@@ -137,6 +137,28 @@ def build_page_pack(pages, max_chars=None):
 
     return "".join(parts)
 
+def find_page_by_reference(original_pages, document_name, page_start):
+    """
+    Find a specific page from a collection of pages by document name and page number.
+    
+    Args:
+        original_pages: List of page dictionaries from load_pdf_pages
+        document_name: Name of the document to search for
+        page_start: Page number to find (1-based)
+    
+    Returns:
+        Page dictionary if found, None otherwise
+    """
+    if not original_pages or not document_name or page_start is None:
+        return None
+    
+    for page in original_pages:
+        if (page.get('document_name') == document_name and 
+            page.get('page_number') == page_start):
+            return page
+    
+    return None
+
 def validate_references(assessment, original_pages):
     """
     Validate that extracted references exist and are accurately quoted.
