@@ -21,7 +21,7 @@ CP.EX.19,technical,The exclusion is not enforced immediately; it only takes effe
 CP.EX.20,technical,The relative corporate finance threshold is between 10% (exclusive) and 30% (inclusive).,TRUE,The bank has implemented a ratchet mechanism whereby the threshold decreases over time.
 CP.EX.21,technical,The exclusion applies only to infrastructure that is solely dedicated to coal assets; shared or multi-use infrastructure is not covered.,FALSE,n/a
 CP.EX.22,material,"For products and services criteria, lending and capital markets are only covered for certain aspects of the bank's policy.",FALSE,n/a
-CP.EX.23,material,The exclusion applies only to expansions above a set capacity threshold; smaller expansions (e.g. <10% increase in plant capacity) are permitted.,FALSE,n/a
+CP.EX.23,material,The exclusion applies only to expansions above a set capacity threshold; smaller expansions are permitted.,FALSE,n/a
 CP.EX.24,technical,The policy does not apply if companies are required to keep coal mines or power plants open by law. ,FALSE,n/a
 CP.EX.25,technical,The policy only applies to medium- or long-term transactions.,FALSE,n/a
 CP.EX.26,material,"The policy allows the bank to make undefined “by exception” decisions, giving it discretion to continue financing despite the exclusion.",FALSE,n/a

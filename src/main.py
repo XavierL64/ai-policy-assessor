@@ -8,7 +8,7 @@ from inputs import input_abn, input_hsbc, input_bbva, input_barclays
 from prompt import ROLE, TASK, INPUTS, STEPS, RULES
 import json
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
 # Get the key from the environment
