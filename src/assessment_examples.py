@@ -413,8 +413,8 @@ POLICY_PAGES_BARCLAYS = """
 === DOC: Climate change statement (Feb 2024) | PAGE: 6 ===
 No project finance to enable the construction or material expansion of thermal coal-fired power plants anywhere in the world, including captives.
 === DOC: Climate change statement (Feb 2024) | PAGE: 11 ===
-Material expansion In relation to Thermal Coal Power, production refers to an investment to (i) extend the unabated operating lifetime of existing thermal coal power plants including captives or (ii) increase net operational thermal power capacity, including captives, by more than 10% measure from a baseline of maximum capacity for preceding 3 years reported.
-# """
+Material expansion In relation to Thermal Coal Power, production refers to an investment to (i) extend the unabated operating lifetime of existing thermal coal power plants including captives or (ii) increase net operational thermal power capacity, including captives, by more than 10% measure from a baseline of maximum capacity for preceding 3 years reported. Material expansion in such cases relates to absolute global increases rather than increases for an entity or Group as a result of mergers or acquisitions. 
+"""
 
 ASSESSMENT_BARCLAYS = {
     "commitment": True,

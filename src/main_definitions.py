@@ -4,8 +4,8 @@ from openai import OpenAI
 from utils import filter_exceptions, validate_references, load_pdf_pages
 from function_schema import tools, tools_ref
 from assessment_examples import ASSESSMENT_ABN, ASSESSMENT_HSBC, ASSESSMENT_BBVA, ASSESSMENT_BARCLAYS
-from inputs import input_abn, input_hsbc, input_bbva, input_barclays, input_ca, input_danske
-from prompt import ROLE, TASK, INPUTS, STEPS, RULES
+from inputs_definitions import input_abn, input_hsbc, input_bbva, input_barclays, input_ca, input_danske
+from prompt_definitions import ROLE, TASK, INPUTS, STEPS, RULES
 import json
 
 # Load environment variables

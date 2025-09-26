@@ -13,8 +13,10 @@ CP.EX.9,CP.1,yes,"Examples of evidence that would trigger this exception: - ""ex
 CP.EX.10,CP.1,no,,
 CP.EX.11,CP.1,no,,
 CP.EX.12,CP.1,no,,
-CP.EX.13,CP.1,yes,"Examples of evidence that would trigger this exception: - ""The bank will not participate in project finance for unabated fossil fuels."" - ""The financing of coal plant modernisation projects is assessed case-by-case, including life extension, decommissioning and conversion, pollution-control retrofits, and Carbon Capture, Utilisation and Storage (CCUS)."" - ""Expansions are allowed if retrofitting reduces greenhouse gas emissions.""",
-CP.EX.14,CP.1,yes,"Examples of evidence that would trigger this exception: - ""Expansions are permitted if contractually committed (e.g. via PPA) or already under construction before 1 January 2021.""",
+CP.EX.13,CP.1,yes,"Examples of evidence that would trigger this exception: - ""The bank will not participate in project finance for unabated fossil fuels."" - ""expansion refers to extension of the unabated lifetime of thermal coal power plants"" - ""The bank may finance retrofitting projects, including the addition of carbon capture and storage (CCS)."" 
+Examples of evidence that would NOT trigger this exception: - ""The bank will provide financing for the decommissioning or early retirement of coal plants.""",
+CP.EX.14,CP.1,yes,"Examples of evidence that would trigger this exception: - ""Expansions are permitted if contractually committed (e.g. via PPA) or already under construction before 1 January 2021.""
+Examples of evidence that would NOT trigger this exception: -""Existing contractual commitments will be honored.""",
 CP.EX.15,CP.1,yes,"Examples of evidence that would trigger this exception: - ""Only coal power projects above 300 MW are restricted"" - ""Coal plants dedicated to specific industrial projects (e.g. aluminium smelters, steel mills) are excluded from the restriction"" - ""exempted activities include captive coal power plants.""",
 CP.EX.16,CP.1,yes,,
 CP.EX.17,CP.1,yes,,

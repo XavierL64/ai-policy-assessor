@@ -4,14 +4,14 @@ CP.EX.2,material,The policy doesn’t apply if the client has a credible transi
 CP.EX.3,material,The policy doesn’t apply if the financing is ringfenced for sustainable activities or if the bank commits to obtain guarantees from clients that the financing will not be used for activities in scope of the policy.,TRUE,The bank requires clients subject to the exception provide a phase out plan aligned with its own and do not engage in coal expansion.
 CP.EX.4,material,The exclusion does not cover expansions that replace existing capacity or do not increase net capacity.,FALSE,n/a
 CP.EX.5,material,The exclusion does not apply when financing does not increase the bank’s exposure.,FALSE,n/a
-CP.EX.6,material,"The exclusion applies only to new coal power plants and does not also apply to exisiting plants or expansions. If expansions or existing plants are not mentioned, assume they remain permitte and this exception applies.",FALSE,n/a
+CP.EX.6,material,"The exclusion applies only to new coal power plants and does not also apply to exisiting plants or expansions. If expansions or existing plants are not mentioned, assume they remain permitted and this exception applies.",FALSE,n/a
 CP.EX.7,material,The policy for companies expanding coal power and mining applies at client level but not at group level.,FALSE,n/a
 CP.EX.8,material,"The policy doesn’t apply to a specific category of clients, such as new clients and State-Owned Enterprises.",FALSE,n/a
 CP.EX.9,material,The exclusion does not cover expansions resulting from mergers or acquisitions (M&A).,TRUE,"The bank requires commitments to retire acquired coal assets early, in line with a net-zero pathway."
 CP.EX.10,material,The relative corporate finance threshold is between 30% (exclusive) and 50% (inclusive).,TRUE,The bank has implemented a ratchet mechanism whereby the threshold decreases over time. 
 CP.EX.11,material,"The policy doesn’t include a relative corporate financing threshold or the threshold is above 50%, and the bank will implement a ratchet mechanism.",FALSE,n/a
 CP.EX.12,technical,Using revenue instead of coal share of power production as metric for relative corporate threshold.,FALSE,n/a
-CP.EX.13,technical,"The exclusion does not apply when financing is for modernisation, abatement, or retrofitting of coal-fired power plants, or when it applies only to abated plants.",FALSE,n/a
+CP.EX.13,technical,"The exclusion does not apply when financing is for modernisation, abatement, or retrofitting of coal-fired power plants, or when it applies only to abated plants or lifetime extension of abated plants.",FALSE,n/a
 CP.EX.14,technical,"The exclusion does not apply to coal power projects that were already announced, permitted, had reached final investment decision (FID), or had signed contracts before the policy took effect.",FALSE,n/a
 CP.EX.15,technical,"The exclusion does not apply to small coal power plants below a certain capacity threshold (e.g. 300 MW), captive power plants, or companies below a defined size.",FALSE,n/a
 CP.EX.16,technical,The policy doesn’t apply to dedicated industrial plants where there is no cost-efficient alternative.,FALSE,n/a
