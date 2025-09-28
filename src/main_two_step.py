@@ -163,14 +163,14 @@ def run_two_step_analysis():
     """
 
     # Load criteria and exceptions
-    criteria = load_criteria("CP.1", "criteria/criteria.csv")
+    criteria = load_criteria("CP.2", "criteria/criteria.csv")
     criteria_description = criteria['criteria_description']
     criteria_guidelines = criteria['criteria_guidelines']
     criteria_examples = criteria['criteria_examples']
-    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
+    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.2")
 
     # Load and prepare policy pages
-    pages = load_pdf_pages("sources/ABN/Exclusion list (Mar 2021).pdf")
+    pages = load_pdf_pages("sources/BBVA/Environmental and Social Framework (Dec 2024).pdf")
     policy_pages = build_page_pack(pages)
 
     print("=== STEP 1: ASSESSING COMMITMENT ===")

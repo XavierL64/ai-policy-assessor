@@ -47,8 +47,8 @@ Strict rules:
 # Step 2: Exception Assessment
 EXCEPTION_TASK = """
 Your task is to:
-- Assess whether exceptions apply to the assessed commitment based on the exception definition.
-- Determine if any mitigant applies based on the mitigant definition.
+- Assess whether exceptions apply to the assessed commitment based on the exception definition and any available examples.
+- Determine if any mitigant applies based on the mitigant definition and any available examples.
 - Provide supporting references when the exception applies or is mitigated.
 """
 
@@ -69,13 +69,12 @@ EXCEPTION_STEPS = f"""
 Follow these steps:
 
 1. Assess exception
-- Evaluate if the exception applies based on the exception_definition and any available exception_examples.
 - Set `"applies": true` if the exception applies, otherwise false.
 - If applies is true, provide a short description ≤ {DESCRIPTION_LENGTH} words.
 
 2. Assess mitigant
 - Only evaluate if `"mitigant"` is True and `"applies"` is true.
-- Set `"mitigated": true` if a mitigant clearly applies based on mitigant_definition, else false.
+- Set `"mitigated": true` if a mitigant applies, else false.
 - If mitigated is true, provide a short description ≤ {DESCRIPTION_LENGTH} words.
 
 3. Provide references

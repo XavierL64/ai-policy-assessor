@@ -38,7 +38,7 @@ messages = [
     # },
     {
         "role": "user",
-        "content": input_abn
+        "content": input_bbva
     }
 ]
 
