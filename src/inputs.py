@@ -3,14 +3,14 @@ from assessment_examples import POLICY_EXTRACT_ABN, POLICY_PAGES_ABN, POLICY_EXT
 import json
 
 # Load criteria and exceptions
-criteria = load_criteria("CP.2", "criteria/criteria.csv")
+criteria = load_criteria("CP.1", "criteria/criteria.csv")
 criteria_description = criteria['criteria_description']
 criteria_guidelines = criteria['criteria_guidelines']
 criteria_examples = criteria['criteria_examples']
-exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.2")
+exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
 # Load and prepare policy pages
-pages = load_pdf_pages("sources/BBVA/Environmental and Social Framework (Dec 2024).pdf")
+pages = load_pdf_pages("sources/ABN/Exclusion list (Mar 2021).pdf")
 policy_pages = build_page_pack(pages)
 
 # Prepare input for the model

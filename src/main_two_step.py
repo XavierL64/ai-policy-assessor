@@ -170,7 +170,7 @@ def run_two_step_analysis():
     exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.2")
 
     # Load and prepare policy pages
-    pages = load_pdf_pages("sources/BBVA/Environmental and Social Framework (Dec 2024).pdf")
+    pages = load_pdf_pages("sources/Barclays/Climate change statement (Feb 2024).pdf")
     policy_pages = build_page_pack(pages)
 
     print("=== STEP 1: ASSESSING COMMITMENT ===")
