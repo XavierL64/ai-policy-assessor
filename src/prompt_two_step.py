@@ -8,23 +8,23 @@ You are a highly specialized sustainable finance analyst trained to evaluate ban
 # Step 1: Commitment Assessment
 COMMITMENT_TASK = """
 Your task is to:
-- Assess whether the policy meets the specified criteria based on the criteria guidelines.
-- Provide supporting references when the criteria is met.
+- Assess whether the policy includes the specified commitment using the description, guidelines, and examples.
+- Provide supporting references when a commitment is identified
 """
 
 COMMITMENT_INPUTS = """
 Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
-- criteria_description: criteria to assess.
-- criteria_guidelines: instructions for assessing the criteria.
-- criteria_examples: examples of evidence for the criteria.
+- commitment_description: commitment to identify.
+- commitment_guidelines: instructions for identifying the commitment.
+- commitment_examples: examples of evidence for the commitment.
 """
 
 COMMITMENT_STEPS = """
 Follow these steps:
 
 1. Determine commitment
-- If the policy includes a clear commitment for the criteria, set `"commitment": true`; otherwise, false.
+- If the policy includes the specified commitment, set `"commitment": true`; otherwise, false.
 
 2. Provide references
 - If `"commitment"` is true, include at least one supporting reference with:
@@ -47,16 +47,16 @@ Strict rules:
 # Step 2: Exception Assessment
 EXCEPTION_TASK = """
 Your task is to:
-- Assess whether exceptions apply to the assessed commitment based on the exception definition and any available examples.
-- Determine if any mitigant applies based on the mitigant definition and any available examples.
+- Assess whether exceptions apply to the assessed commitment based on the exception definition and any examples if provided.
+- Determine if any mitigant applies based on the mitigant definition and any examples if provided.
 - Provide supporting references when the exception applies or is mitigated.
 """
 
 EXCEPTION_INPUTS = """
 Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
-- criteria_description: criteria for which exceptions need to be assessed. 
-- criteria_guidelines: information about the criteria.
+- commitment_description: commitment for which exceptions need to be assessed.
+- commitment_guidelines: information about the commitment.
 - exception_id: ID of the specific exception to assess.
 - exception_definition: definition of the exception to evaluate.
 - mitigant: boolean indicating if this exception can be mitigated.

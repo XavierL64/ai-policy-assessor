@@ -6,25 +6,25 @@ You are a highly specialized sustainable finance analyst trained to evaluate ban
 
 TASK = """
 Your task is to:
-- Assess whether the policy meets the specified criteria based on the criteria guidelines.
-- Determine if any exceptions and mitigants apply based on the exception taxonomy.
-- Provide supporting references when the criteria is met or an exception/mitigant is identified.
+- Assess whether the policy includes the specified commitment using the description, guidelines, and examples.
+- Determine if the specified exceptions and mitigants apply using the exception taxonomy.
+- Provide supporting references when a commitment is identified or an exception/mitigant applies.
 """
 
 INPUTS = """
 Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
-- criteria_description: criteria to assess.
-- criteria_guidelines: instructions for assessing the criteria.
-- criteria_examples: examples of evidence that would satisfy the criteria.
-- exception_taxonomy: a list of exceptions with IDs, definitions, mitigants, and examples where available.
+- commitment_description: commitment to identify.
+- commitment_guidelines: instructions for identifying the commitment.
+- commitment_examples: examples of evidence for the commitment.
+- exception_taxonomy: a list of exceptions with IDs, definitions, mitigants, and any examples if provided.
 """
 
 STEPS = f"""
 Follow these steps:
 
 1. Determine commitment
-- If the policy includes a clear commitment for the criteria, set `"commitment": true`; otherwise, false.
+- If the policy includes the specified commitment, set `"commitment": true`; otherwise, false.
 	
 2. Assess exceptions
 - If `"commitment"` is true, evaluate every exception in the taxonomy.

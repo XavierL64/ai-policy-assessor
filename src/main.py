@@ -38,7 +38,7 @@ messages = [
     # },
     {
         "role": "user",
-        "content": input_abn
+        "content": input_bbva
     }
 ]
 
@@ -47,7 +47,7 @@ client = OpenAI(api_key=api_key)
 
 # Create chat completion
 response = client.chat.completions.create(
-    model="gpt-4o",
+    model="gpt-4.1",
     messages=messages,
     tools=tools_ref,
     tool_choice={

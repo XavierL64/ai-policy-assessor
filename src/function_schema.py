@@ -3,14 +3,14 @@ tools = [
         "type": "function",
         "function": {
             "name": "assess_commitment_exceptions",
-            "description": "Assess whether the policy contains a commitment for the relevant criteria and identify any applicable exceptions and their mitigants.",
+            "description": "Assess whether the policy contains the specified commitment and identify any applicable exceptions and their mitigants.",
             "strict": True,
             "parameters": {
                 "type": "object",
                 "properties": {
                     "commitment": {
                         "type": "boolean",
-                        "description": "True if the policy contains a commitment for the relevant criteria."
+                        "description": "True if the policy contains the specified commitment."
                     },
                     "exceptions": {
                         "type": "array",
@@ -62,14 +62,14 @@ tools_ref = [
         "type": "function",
         "function": {
             "name": "assess_commitment_exceptions",
-            "description": "Assess whether the policy contains a commitment for the relevant criteria and identify any applicable exceptions and their mitigants.",
+            "description": "Assess whether the policy contains the specified commitment and identify any applicable exceptions and their mitigants.",
             "strict": True,
             "parameters": {
                 "type": "object",
                 "properties": {
                     "commitment": {
                         "type": "boolean",
-                        "description": "True if the policy contains a commitment for the relevant criteria."
+                        "description": "True if the policy contains the specified commitment."
                     },
                     "exceptions": {
                         "type": "array",
@@ -147,14 +147,14 @@ tools_deprecated_format = [
     {
         "type": "function",
         "name": "assess_commitment_exceptions",
-        "description": "Assess whether the policy contains a commitment for the relevant criteria and identify any applicable exceptions and their mitigants.",
+        "description": "Assess whether the policy contains the specified commitment and identify any applicable exceptions and their mitigants.",
         "strict": True,
         "parameters": {
             "type": "object",
             "properties": {
                 "commitment": {
                     "type": "boolean",
-                    "description": "True if the policy contains a commitment for the relevant criteria."
+                    "description": "True if the policy contains the specified commitment."
                 },
                 "exceptions": {
                     "type": "array",

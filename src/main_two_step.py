@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from utils import load_criteria, load_exceptions, load_pdf_pages, build_page_pack, get_exception_examples
+from utils import load_commitment, load_exceptions, load_pdf_pages, build_page_pack, get_exception_examples
 from function_schema_two_step import assess_commitment_schema, assess_exception_schema
 from prompt_two_step import build_commitment_prompt, build_exception_prompt
 import json
@@ -15,9 +15,14 @@ api_key = os.getenv("OPENAI_API_KEY")
 # Create OpenAI client
 client = OpenAI(api_key=api_key)
 
-def assess_commitment_step(policy_pages, criteria_description, criteria_guidelines, criteria_examples):
+# configuration variables
+COMMITMENT_ID = "CP.1"
+PDF_SOURCE = "sources/BBVA/Environmental and Social Framework (Dec 2024).pdf"
+MODEL_NAME = "gpt-4.1"
+
+def assess_commitment_step(policy_pages, commitment_description, commitment_guidelines, commitment_examples):
     """
-    Step 1: Assess whether the policy contains a commitment for the criteria.
+    Step 1: Assess whether the policy contains a commitment.
     """
 
     # Build the commitment assessment prompt
@@ -27,20 +32,20 @@ Policy pages to assess:
 {policy_pages}
 <<<END_POLICY_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 """
 
     messages = [
@@ -56,7 +61,7 @@ Criteria examples:
 
     # Create chat completion for commitment assessment
     response = client.chat.completions.create(
-        model="gpt-4.1",
+        model=MODEL_NAME,
         messages=messages,
         tools=assess_commitment_schema,
         tool_choice={
@@ -70,16 +75,16 @@ Criteria examples:
     raw_output = response.choices[0].message.tool_calls[0].function.arguments
     return json.loads(raw_output)
 
-def assess_exception_step(policy_pages, exception_data, criteria_id, criteria_description, criteria_guidelines):
+def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_description, commitment_guidelines):
     """
     Step 2: Assess whether a specific exception applies and if it is mitigated.
     """
 
-    # Extract specific examples for this exception and criteria
+    # Extract specific examples for this exception and commitment
     examples = get_exception_examples(
         exception_data['exception_id'],
         "exceptions/exceptions_criteria.csv",
-        criteria_id
+        commitment_id
     )
 
     # Build the exception assessment prompt
@@ -89,15 +94,15 @@ Policy pages to assess:
 {policy_pages}
 <<<END_POLICY_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
 Exception ID:
 <<<EXCEPTION_ID>>>
@@ -143,7 +148,7 @@ Mitigant examples:
 
     # Create chat completion for exception assessment
     response = client.chat.completions.create(
-        model="gpt-4.1",
+        model=MODEL_NAME,
         messages=messages,
         tools=assess_exception_schema,
         tool_choice={
@@ -162,15 +167,15 @@ def run_two_step_analysis():
     Main function to run the two-step analysis approach.
     """
 
-    # Load criteria and exceptions
-    criteria = load_criteria("CP.2", "criteria/criteria.csv")
-    criteria_description = criteria['criteria_description']
-    criteria_guidelines = criteria['criteria_guidelines']
-    criteria_examples = criteria['criteria_examples']
-    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.2")
+    # Load commitment and exceptions
+    commitment = load_commitment(COMMITMENT_ID, "criteria/criteria.csv")
+    commitment_description = commitment['commitment_description']
+    commitment_guidelines = commitment['commitment_guidelines']
+    commitment_examples = commitment['commitment_examples']
+    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", COMMITMENT_ID)
 
     # Load and prepare policy pages
-    pages = load_pdf_pages("sources/Barclays/Climate change statement (Feb 2024).pdf")
+    pages = load_pdf_pages(PDF_SOURCE)
     policy_pages = build_page_pack(pages)
 
     print("=== STEP 1: ASSESSING COMMITMENT ===")
@@ -178,9 +183,9 @@ def run_two_step_analysis():
     # Step 1: Assess commitment
     commitment_result = assess_commitment_step(
         policy_pages,
-        criteria_description,
-        criteria_guidelines,
-        criteria_examples
+        commitment_description,
+        commitment_guidelines,
+        commitment_examples
     )
 
     print(f"Commitment: {commitment_result['commitment']}")
@@ -195,7 +200,7 @@ def run_two_step_analysis():
         for i, exception_data in enumerate(exception_taxonomy, 1):
             print(f"Assessing exception {i}/{len(exception_taxonomy)}: {exception_data['exception_id']}")
 
-            exception_result = assess_exception_step(policy_pages, exception_data, "CP.1", criteria_description, criteria_guidelines)
+            exception_result = assess_exception_step(policy_pages, exception_data, COMMITMENT_ID, commitment_description, commitment_guidelines)
 
             # Only include references if the exception applies
             if not exception_result['applies']:

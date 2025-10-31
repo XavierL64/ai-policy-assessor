@@ -4,22 +4,22 @@ import re
 import os
 import fitz
 
-def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path, criteria_id):
+def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path, commitment_id):
       """
-      Loads exceptions with criteria-specific examples.
-      Returns only exceptions for the specified criteria where applies="yes".
+      Loads exceptions with commitment-specific examples.
+      Returns only exceptions for the specified commitment where applies="yes".
       Cleans non-breaking spaces and converts NaN to None.
-      
+
       Args:
           exceptions_csv_path: Path to the base exceptions CSV file
           exceptions_criteria_csv_path: Path to the exceptions-criteria mapping CSV file
-          criteria_id: ID of the criteria to filter exceptions for
-      
+          commitment_id: ID of the commitment to filter exceptions for
+
       Returns:
-          List of dictionaries containing exception data for the specified criteria
+          List of dictionaries containing exception data for the specified commitment
       """
-      if not exceptions_criteria_csv_path or not criteria_id:
-          raise ValueError("Both exceptions_criteria_csv_path and criteria_id are required")
+      if not exceptions_criteria_csv_path or not commitment_id:
+          raise ValueError("Both exceptions_criteria_csv_path and commitment_id are required")
       
       # Load base exceptions
       exceptions_df = pd.read_csv(exceptions_csv_path, encoding='utf-8')
@@ -31,9 +31,9 @@ def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path, criteria_
       exceptions_criteria_df = exceptions_criteria_df.where(pd.notnull(exceptions_criteria_df), None)
       exceptions_criteria_df = exceptions_criteria_df.map(lambda x: x.replace("\xa0", " ").strip() if isinstance(x, str) else x)
 
-      # Filter for the specific criteria AND where applies="yes"
+      # Filter for the specific commitment AND where applies="yes"
       exceptions_criteria_df = exceptions_criteria_df[
-          (exceptions_criteria_df['criteria_id'] == criteria_id) &
+          (exceptions_criteria_df['commitment_id'] == commitment_id) &
           (exceptions_criteria_df['applies'] == 'yes')
       ]
 
@@ -42,14 +42,14 @@ def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path, criteria_
       return result[["exception_id", "exception_definition", "mitigant", "mitigant_definition",
                     "exception_examples", "mitigant_examples"]].to_dict(orient="records")
 
-def get_exception_examples(exception_id, exceptions_criteria_csv_path, criteria_id):
+def get_exception_examples(exception_id, exceptions_criteria_csv_path, commitment_id):
     """
-    Extracts examples for a specific exception and criteria combination.
+    Extracts examples for a specific exception and commitment combination.
 
     Args:
         exception_id: ID of the exception to get examples for
         exceptions_criteria_csv_path: Path to the exceptions-criteria mapping CSV file
-        criteria_id: ID of the criteria
+        commitment_id: ID of the commitment
 
     Returns:
         Dictionary with exception_examples and mitigant_examples for the specific exception
@@ -58,10 +58,10 @@ def get_exception_examples(exception_id, exceptions_criteria_csv_path, criteria_
     exceptions_criteria_df = exceptions_criteria_df.where(pd.notnull(exceptions_criteria_df), None)
     exceptions_criteria_df = exceptions_criteria_df.map(lambda x: x.replace("\xa0", " ").strip() if isinstance(x, str) else x)
 
-    # Filter for the specific exception and criteria
+    # Filter for the specific exception and commitment
     filtered_df = exceptions_criteria_df[
         (exceptions_criteria_df['exception_id'] == exception_id) &
-        (exceptions_criteria_df['criteria_id'] == criteria_id)
+        (exceptions_criteria_df['commitment_id'] == commitment_id)
     ]
 
     if filtered_df.empty:
@@ -76,18 +76,18 @@ def get_exception_examples(exception_id, exceptions_criteria_csv_path, criteria_
         'mitigant_examples': row.get('mitigant_examples', 'No examples provided')
     }
 
-def load_criteria(criteria_id, csv_path):
+def load_commitment(commitment_id, csv_path):
     """
-    Loads a single criterion from a CSV file based on its ID.
-    Returns a dictionary with 'criteria_description' and 'criteria_guidelines'.
+    Loads a single commitment from a CSV file based on its ID.
+    Returns a dictionary with 'commitment_description' and 'commitment_guidelines'.
     """
     df = pd.read_csv(csv_path, encoding='utf-8')
-    criteria = df[df['criteria_id'] == criteria_id]
+    commitment = df[df['commitment_id'] == commitment_id]
 
     return {
-        'criteria_description': criteria['criteria_description'].iloc[0],
-        'criteria_guidelines': criteria['criteria_guidelines'].iloc[0],
-        'criteria_examples': criteria['criteria_examples'].iloc[0]
+        'commitment_description': commitment['commitment_description'].iloc[0],
+        'commitment_guidelines': commitment['commitment_guidelines'].iloc[0],
+        'commitment_examples': commitment['commitment_examples'].iloc[0]
     }
 
 def filter_exceptions(data):

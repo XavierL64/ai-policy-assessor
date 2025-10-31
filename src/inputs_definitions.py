@@ -1,13 +1,13 @@
-from utils import (load_criteria, load_exceptions, load_pdf_pages, build_page_pack,
+from utils import (load_commitment, load_exceptions, load_pdf_pages, build_page_pack,
                    detect_definitions_section, split_policy_and_definitions)
 from assessment_examples import POLICY_EXTRACT_ABN, POLICY_PAGES_ABN, POLICY_EXTRACT_HSBC, POLICY_PAGES_HSBC, POLICY_EXTRACT_BBVA, POLICY_PAGES_BBVA, POLICY_EXTRACT_BARCLAYS, POLICY_PAGES_BARCLAYS
 import json
 
-# Load criteria and exceptions
-criteria = load_criteria("CP.1", "criteria/criteria.csv")
-criteria_description = criteria['criteria_description']
-criteria_guidelines = criteria['criteria_guidelines']
-criteria_examples = criteria['criteria_examples']
+# Load commitment and exceptions
+commitment = load_commitment("CP.1", "criteria/criteria.csv")
+commitment_description = commitment['commitment_description']
+commitment_guidelines = commitment['commitment_guidelines']
+commitment_examples = commitment['commitment_examples']
 exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", "CP.1")
 
 # Load and prepare policy pages with definitions detection
@@ -36,20 +36,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
@@ -68,20 +68,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
@@ -100,20 +100,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
@@ -132,20 +132,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
@@ -164,20 +164,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
@@ -196,20 +196,20 @@ Definitions section:
 {definitions_pages if definitions_pages else "No definitions section available."}
 <<<END_DEFINITIONS_PAGES>>>
 
-Criteria description:
-<<<CRITERIA_DESCRIPTION>>>
-{criteria_description}
-<<<END_CRITERIA_DESCRIPTION>>>
+Commitment description:
+<<<COMMITMENT_DESCRIPTION>>>
+{commitment_description}
+<<<END_COMMITMENT_DESCRIPTION>>>
 
-Criteria assessment guidelines:
-<<<CRITERIA_GUIDELINES>>>
-{criteria_guidelines}
-<<<END_CRITERIA_GUIDELINES>>>
+Commitment assessment guidelines:
+<<<COMMITMENT_GUIDELINES>>>
+{commitment_guidelines}
+<<<END_COMMITMENT_GUIDELINES>>>
 
-Criteria examples:
-<<<CRITERIA_EXAMPLES>>>
-{criteria_examples}
-<<<END_CRITERIA_EXAMPLES>>>
+Commitment examples:
+<<<COMMITMENT_EXAMPLES>>>
+{commitment_examples}
+<<<END_COMMITMENT_EXAMPLES>>>
 
 Exception taxonomy:
 <<<EXCEPTION_TAXONOMY>>>
