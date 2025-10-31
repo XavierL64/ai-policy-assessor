@@ -1,4 +1,4 @@
-﻿exception_id,criteria_id,applies,exception_examples,mitigant_examples
+﻿exception_id,commitment_id,applies,exception_examples,mitigant_examples
 CP.EX.1,CP.1,yes,,
 CP.EX.2,CP.1,no,,
 CP.EX.3,CP.1,no,,

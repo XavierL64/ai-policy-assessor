@@ -16,8 +16,8 @@ api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
 # configuration variables
-COMMITMENT_ID = "CP.1"
-PDF_SOURCE = "sources/BBVA/Environmental and Social Framework (Dec 2024).pdf"
+COMMITMENT_ID = "CP.2"
+PDF_SOURCE = "sources/Barclays/Climate change statement (Feb 2024).pdf"
 MODEL_NAME = "gpt-4.1"
 
 def assess_commitment_step(policy_pages, commitment_description, commitment_guidelines, commitment_examples):
@@ -75,7 +75,7 @@ Commitment examples:
     raw_output = response.choices[0].message.tool_calls[0].function.arguments
     return json.loads(raw_output)
 
-def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_description, commitment_guidelines):
+def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_references):
     """
     Step 2: Assess whether a specific exception applies and if it is mitigated.
     """
@@ -94,15 +94,10 @@ Policy pages to assess:
 {policy_pages}
 <<<END_POLICY_PAGES>>>
 
-Commitment description:
-<<<COMMITMENT_DESCRIPTION>>>
-{commitment_description}
-<<<END_COMMITMENT_DESCRIPTION>>>
-
-Commitment guidelines:
-<<<COMMITMENT_GUIDELINES>>>
-{commitment_guidelines}
-<<<END_COMMITMENT_GUIDELINES>>>
+Commitment:
+<<<COMMITMENT>>>
+{commitment_references}
+<<<END_COMMITMENT>>>
 
 Exception ID:
 <<<EXCEPTION_ID>>>
@@ -191,6 +186,16 @@ def run_two_step_analysis():
     print(f"Commitment: {commitment_result['commitment']}")
     print(f"Commitment references: {len(commitment_result['references'])}")
 
+    # Format commitment references into readable text (only first reference)
+    formatted_references = ""
+    if commitment_result['references']:
+        first_ref = commitment_result['references'][0]
+        formatted_references = f"commitment: {first_ref.get('excerpt', '')}"
+
+    print("\n=== FORMATTED COMMITMENT REFERENCES ===")
+    print(formatted_references)
+    print("=== END FORMATTED REFERENCES ===\n")
+
     # Step 2: Assess exceptions (only if commitment is True)
     exceptions_results = []
 
@@ -200,7 +205,7 @@ def run_two_step_analysis():
         for i, exception_data in enumerate(exception_taxonomy, 1):
             print(f"Assessing exception {i}/{len(exception_taxonomy)}: {exception_data['exception_id']}")
 
-            exception_result = assess_exception_step(policy_pages, exception_data, COMMITMENT_ID, commitment_description, commitment_guidelines)
+            exception_result = assess_exception_step(policy_pages, exception_data, COMMITMENT_ID, formatted_references)
 
             # Only include references if the exception applies
             if not exception_result['applies']:

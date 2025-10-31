@@ -47,16 +47,15 @@ Strict rules:
 # Step 2: Exception Assessment
 EXCEPTION_TASK = """
 Your task is to:
-- Assess whether exceptions apply to the assessed commitment based on the exception definition and any examples if provided.
-- Determine if any mitigant applies based on the mitigant definition and any examples if provided.
+- Assess whether the specified exception applies to the identified commitment using the exception definition and any examples if provided.
+- Determine if any mitigant applies using the mitigant definition and any examples if provided.
 - Provide supporting references when the exception applies or is mitigated.
 """
 
 EXCEPTION_INPUTS = """
 Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
-- commitment_description: commitment for which exceptions need to be assessed.
-- commitment_guidelines: information about the commitment.
+- commitment: commitment for which the exception is assessed.
 - exception_id: ID of the specific exception to assess.
 - exception_definition: definition of the exception to evaluate.
 - mitigant: boolean indicating if this exception can be mitigated.
@@ -88,6 +87,7 @@ Follow these steps:
 
 EXCEPTION_RULES = """
 Strict rules:
+- Only assess the exception in relation to the specified commitment.
 - Never paraphrase the policy_pages. Only quote excerpts verbatim from it.
 - Never invent page numbers or document names that are not in the policy_pages.
 - Never invent exception or mitigant details not provided in the inputs.
