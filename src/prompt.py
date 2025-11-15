@@ -14,6 +14,7 @@ Your task is to:
 INPUTS = """
 Inputs:
 - policy_pages: policy text with page headers in the form: === DOC: <document_name> | PAGE: <n> ===
+- assessment_date: the date on which this assessment is being performed.
 - commitment_description: commitment to identify.
 - commitment_guidelines: instructions for identifying the commitment.
 - commitment_examples: examples of evidence for the commitment.
