@@ -204,7 +204,7 @@ Mitigant examples:
     return make_api_call()
 
 def run_two_step_analysis(commitment_id="CP.2",
-                          pdf_source="sources/Barclays/Climate change statement (Feb 2024).pdf",
+                          pdf_source="policies/Barclays/Climate change statement (Feb 2024).pdf",
                           model_name="gpt-4o",
                           policy_debug=False,
                           input_debug=False,
@@ -325,7 +325,7 @@ if __name__ == "__main__":
     # Default configuration for standalone execution
     run_two_step_analysis(
         commitment_id="CP.2",
-        pdf_source="sources/Barclays/Climate change statement (Feb 2024).pdf",
+        pdf_source="policies/Barclays/Climate change statement (Feb 2024).pdf",
         model_name="gpt-4o",
         policy_debug=False,
         input_debug=False,

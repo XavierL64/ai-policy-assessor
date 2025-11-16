@@ -1,6 +1,6 @@
 # Assessment parameters
 COMMITMENT_ID = "CP.1"
-PDF_SOURCE = "sources/ABN/Exclusion list (Mar 2021).pdf"
+PDF_SOURCE = "policies/ABN/Exclusion list (Mar 2021).pdf"
 
 # Run config
 APPROACH = "two_step" # Choose from "single_step", "two_step_simple", "two_step"
