@@ -263,136 +263,98 @@ def validate_references(assessment, original_pages):
     
     return validated_assessment
 
-def detect_definitions_section(pages):
+def interactive_reference_selector(references):
     """
-    Detect if there is a definitions section in the policy pages.
+    Interactive function to let user select and edit commitment references.
+    Returns formatted reference text to be used in exception assessment.
 
     Args:
-        pages: List of page dictionaries from load_pdf_pages
+        references: List of reference dictionaries from commitment assessment
 
     Returns:
-        dict: Contains 'has_definitions' (bool), 'start_page' (int), 'end_page' (int), 'section_title' (str)
+        tuple: (formatted_reference_str, selected_references_list)
+            - formatted_reference_str: Formatted reference text to be used in exception step
+            - selected_references_list: List of selected reference dictionaries
     """
-    definitions_patterns = [
-        r'\b(key\s+definitions?|definitions?|glossary|key\s+terms?)\b',
-        r'\b(defined\s+terms?)\b'
-    ]
+    if not references:
+        print("\nNo references found.")
+        return "", []
 
-    for page in pages:
-        text = page.get('text', '')
-        text_lower = text.lower()
+    print("\n" + "="*80)
+    print("COMMITMENT REFERENCES FOUND")
+    print("="*80)
 
-        # Look for definitions section headers
-        for pattern in definitions_patterns:
-            matches = re.finditer(pattern, text_lower, re.IGNORECASE)
-            for match in matches:
-                # Get the context around the match
-                start_pos = match.start()
-                before_text = text_lower[max(0, start_pos-50):start_pos]
-                after_text = text_lower[start_pos:start_pos+200]
-                original_after_text = text[start_pos:start_pos+200]
+    # Display all references with numbers
+    for i, ref in enumerate(references, 1):
+        excerpt = ref.get('excerpt', 'N/A')
 
-                # Skip if this looks like a table of contents entry (has dots leading to page numbers)
-                if re.search(r'\.{3,}', after_text[:100]):  # Three or more dots in a row
-                    continue
+        print(f"\n[{i}] Page: {ref.get('page_number', 'N/A')}")
+        print(f"    Excerpt: {excerpt}")
 
-                # Skip if followed immediately by page numbers pattern
-                if re.search(r'\s*\.+\s*\d+\s*$', after_text[:50]):
-                    continue
+    print("\n" + "="*80)
 
-                # Check if this appears to be a section header (start of line or after punctuation)
-                is_section_header = (
-                    re.search(r'(\n|^)\s*' + pattern, before_text + match.group(), re.IGNORECASE) or
-                    re.search(r'^\s*' + pattern, after_text, re.IGNORECASE) or
-                    any(char in before_text[-10:] for char in ['\n', '.', ';', ':'])
-                )
+    # Get user selection
+    while True:
+        selection = input("\nEnter reference numbers to include (e.g., '1,3' or '1' or 'all'): ").strip()
 
-                if is_section_header:
-                    # Additional validation: look for actual definitions content
-                    # Check if the page contains definition-like content
-                    has_definition_content = (
-                        # Look for term/definition table headers
-                        re.search(r'\b(term|definition)\b.*\b(definition|term)\b', after_text[:300], re.IGNORECASE) or
-                        # Look for definition patterns (word followed by explanation)
-                        re.search(r'\n\w+[\s\w]*\n.*refers?\s+to|means|is\s+defined\s+as', after_text[:500], re.IGNORECASE) or
-                        # Look for bullet points or lists with definitions
-                        re.search(r'\n\s*[•\-\*]\s*\w+.*?[:;]\s*.{10,}', after_text[:500], re.IGNORECASE)
-                    )
-
-                    if has_definition_content:
-                        return {
-                            'has_definitions': True,
-                            'start_page': page['page_number'],
-                            'section_title': match.group(),
-                            'detected_text': original_after_text[:100]
-                        }
-
-    return {
-        'has_definitions': False,
-        'start_page': None,
-        'section_title': None,
-        'detected_text': None
-    }
-
-def split_policy_and_definitions(pages, definitions_info):
-    """
-    Split policy pages into policy content and definitions section.
-
-    Args:
-        pages: List of page dictionaries from load_pdf_pages
-        definitions_info: Dict from detect_definitions_section
-
-    Returns:
-        dict: Contains 'policy_pages' and 'definitions_pages' lists
-    """
-    if not definitions_info['has_definitions']:
-        return {
-            'policy_pages': pages,
-            'definitions_pages': []
-        }
-
-    start_page = definitions_info['start_page']
-    section_title = definitions_info['section_title']
-
-    # Find where definitions section ends by looking for next major section
-    end_page = len(pages)  # Default to end of document
-
-    # Look for section endings (next major section or end patterns)
-    for i, page in enumerate(pages[start_page-1:], start=start_page):
-        text = page.get('text', '').lower()
-
-        # Look for next major section headers that would indicate end of definitions
-        next_section_patterns = [
-            r'\b(introduction|background|scope|purpose|policy|procedures?|implementation|compliance|governance|responsibilities|appendix|annex)\b',
-            r'\b(section\s+\d+|chapter\s+\d+|\d+\.\s+[a-z])',
-            r'^\s*[ivx]+\.\s+',  # Roman numerals
-            r'^\s*[a-z]\.\s+'    # Letter enumeration
-        ]
-
-        for pattern in next_section_patterns:
-            if re.search(r'(\n|^)\s*' + pattern, text, re.IGNORECASE):
-                # Don't end on the same page we started unless it's clearly a separate section
-                if i > start_page:
-                    end_page = i - 1
-                    break
-
-        if end_page < len(pages):
+        if selection.lower() == 'all':
+            selected_refs = references
             break
-
-    # Split the pages
-    policy_pages = []
-    definitions_pages = []
-
-    for page in pages:
-        page_num = page['page_number']
-        if page_num < start_page:
-            policy_pages.append(page)
-        elif page_num <= end_page:
-            definitions_pages.append(page)
         else:
-            policy_pages.append(page)
+            try:
+                indices = [int(x.strip()) - 1 for x in selection.split(',')]
+                if all(0 <= i < len(references) for i in indices):
+                    selected_refs = [references[i] for i in indices]
+                    break
+                else:
+                    print(f"Invalid selection. Please enter numbers between 1 and {len(references)}.")
+            except (ValueError, IndexError):
+                print("Invalid input. Please enter comma-separated numbers or 'all'.")
 
-    return {
-        'policy_pages': policy_pages,
-        'definitions_pages': definitions_pages
-    }
+    # Combine selected excerpts
+    combined_excerpts = " ".join([ref.get('excerpt', '') for ref in selected_refs])
+
+    print("\n" + "="*80)
+    print("COMBINED REFERENCE TEXT")
+    print("="*80)
+    print(combined_excerpts)
+    print("="*80)
+
+    # Allow editing
+    edit = input("\nWould you like to edit this text? (y/n): ").strip().lower()
+
+    if edit == 'y':
+        print("\nPaste or type your edited text below, then press Enter twice to finish:")
+        print("-" * 80)
+
+        lines = []
+        empty_count = 0
+        while True:
+            try:
+                line = input()
+                if line == "":
+                    empty_count += 1
+                    if empty_count >= 2:
+                        break
+                    lines.append(line)
+                else:
+                    empty_count = 0
+                    lines.append(line)
+            except EOFError:
+                break
+
+        if lines:
+            # Remove trailing empty lines
+            while lines and lines[-1] == "":
+                lines.pop()
+            combined_excerpts = '\n'.join(lines)
+
+    formatted_reference = f"commitment: {combined_excerpts}"
+
+    print("\n" + "="*80)
+    print("FINAL REFERENCE TEXT TO BE USED")
+    print("="*80)
+    print(formatted_reference)
+    print("="*80)
+
+    return formatted_reference, selected_refs

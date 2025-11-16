@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI, RateLimitError
-from utils import load_commitment, load_exceptions, load_pdf_pages, build_page_pack, get_exception_examples, interactive_reference_selector
-from function_schema_two_step import assess_commitment_schema, assess_exception_schema
-from prompt_two_step import build_commitment_prompt, build_exception_prompt
+from utils import load_commitment, load_exceptions, load_pdf_pages, build_page_pack, interactive_reference_selector
+from function_schema_two_step_simple import assess_commitment_schema, assess_all_exceptions_schema
+from prompt_two_step_simple import build_commitment_prompt, build_all_exceptions_prompt
 from config import assessment_date
 import json
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
@@ -20,10 +20,10 @@ client = OpenAI(api_key=api_key)
 # configuration variables
 COMMITMENT_ID = "CP.2"
 PDF_SOURCE = "sources/Barclays/Climate change statement (Feb 2024).pdf"
-MODEL_NAME = "gpt-4.1"
+MODEL_NAME = "gpt-4o"
 POLICY_DEBUG = False  # Set to True to print policy pages in commitment evaluation
 INPUT_DEBUG = False   # Set to True to print other inputs in both evaluation steps
-INTERACTIVE_MODE = True  # Set to True to manually select and edit commitment references
+INTERACTIVE_MODE = False  # Set to True to manually select and edit commitment references
 
 # Global token counter
 total_tokens_used = 0
@@ -117,20 +117,13 @@ Commitment examples:
     stop=stop_after_attempt(6),
     retry=retry_if_exception_type(RateLimitError)
 )
-def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_references, commitment_guidelines, assessment_date):
+def assess_all_exceptions_step(policy_pages, exception_taxonomy, commitment_id, commitment_references, commitment_guidelines, assessment_date):
     """
-    Step 2: Assess whether a specific exception applies and if it is mitigated.
+    Step 2: Assess all exceptions at once.
     """
-
-    # Extract specific examples for this exception and commitment
-    examples = get_exception_examples(
-        exception_data['exception_id'],
-        "exceptions/exceptions_criteria.csv",
-        commitment_id
-    )
 
     # Build the exception assessment prompt
-    exception_input = f"""
+    exceptions_input = f"""
 Policy pages to assess:
 <<<POLICY_PAGES>>>
 {policy_pages}
@@ -151,52 +144,27 @@ Commitment guidelines:
 {commitment_guidelines}
 <<<END_COMMITMENT_GUIDELINES>>>
 
-Exception ID:
-<<<EXCEPTION_ID>>>
-{exception_data['exception_id']}
-<<<END_EXCEPTION_ID>>>
-
-Exception definition:
-<<<EXCEPTION_DEFINITION>>>
-{exception_data['exception_definition']}
-<<<END_EXCEPTION_DEFINITION>>>
-
-Mitigant available:
-<<<MITIGANT>>>
-{exception_data['mitigant']}
-<<<END_MITIGANT>>>
-
-Mitigant definition:
-<<<MITIGANT_DEFINITION>>>
-{exception_data.get('mitigant_definition', 'n/a')}
-<<<END_MITIGANT_DEFINITION>>>
-
-Exception examples:
-<<<EXCEPTION_EXAMPLES>>>
-{examples['exception_examples']}
-<<<END_EXCEPTION_EXAMPLES>>>
-
-Mitigant examples:
-<<<MITIGANT_EXAMPLES>>>
-{examples['mitigant_examples']}
-<<<END_MITIGANT_EXAMPLES>>>
+Exception taxonomy:
+<<<EXCEPTION_TAXONOMY>>>
+{json.dumps(exception_taxonomy, indent=2)}
+<<<END_EXCEPTION_TAXONOMY>>>
 """
 
     messages = [
         {
             "role": "system",
-            "content": build_exception_prompt()
+            "content": build_all_exceptions_prompt()
         },
         {
             "role": "user",
-            "content": exception_input
+            "content": exceptions_input
         }
     ]
 
     # Debug prints
     if INPUT_DEBUG:
         print("\n" + "="*80)
-        print(f"DEBUG - INPUTS (EXCEPTION STEP: {exception_data['exception_id']})")
+        print("DEBUG - INPUTS (ALL EXCEPTIONS STEP)")
         print("="*80)
         print("\n--- ASSESSMENT DATE ---")
         print(assessment_date)
@@ -204,28 +172,18 @@ Mitigant examples:
         print(commitment_references)
         print("\n--- COMMITMENT GUIDELINES ---")
         print(commitment_guidelines)
-        print("\n--- EXCEPTION ID ---")
-        print(exception_data['exception_id'])
-        print("\n--- EXCEPTION DEFINITION ---")
-        print(exception_data['exception_definition'])
-        print("\n--- MITIGANT ---")
-        print(exception_data['mitigant'])
-        print("\n--- MITIGANT DEFINITION ---")
-        print(exception_data.get('mitigant_definition', 'n/a'))
-        print("\n--- EXCEPTION EXAMPLES ---")
-        print(examples['exception_examples'])
-        print("\n--- MITIGANT EXAMPLES ---")
-        print(examples['mitigant_examples'])
+        print("\n--- EXCEPTION TAXONOMY ---")
+        print(json.dumps(exception_taxonomy, indent=2))
         print("="*80 + "\n")
 
-    # Create chat completion for exception assessment
+    # Create chat completion for all exceptions assessment
     response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=messages,
-        tools=assess_exception_schema,
+        tools=assess_all_exceptions_schema,
         tool_choice={
             "type": "function",
-            "function": {"name": "assess_exception"}
+            "function": {"name": "assess_all_exceptions"}
         },
         temperature=0
     )
@@ -238,9 +196,11 @@ Mitigant examples:
     raw_output = response.choices[0].message.tool_calls[0].function.arguments
     return json.loads(raw_output)
 
-def run_two_step_analysis():
+def run_two_step_simple_analysis():
     """
-    Main function to run the two-step analysis approach.
+    Main function to run the two-step simple analysis approach.
+    Step 1: Assess commitment
+    Step 2: Assess all exceptions at once
     """
 
     # Load commitment and exceptions
@@ -285,33 +245,36 @@ def run_two_step_analysis():
     print(formatted_references)
     print("=== END FORMATTED REFERENCES ===\n")
 
-    # Step 2: Assess exceptions (only if commitment is True)
+    # Step 2: Assess all exceptions (only if commitment is True)
     exceptions_results = []
 
     if commitment_result['commitment']:
-        print(f"\n=== STEP 2: ASSESSING {len(exception_taxonomy)} EXCEPTIONS ===")
+        print(f"\n=== STEP 2: ASSESSING EXCEPTIONS ===")
 
-        for i, exception_data in enumerate(exception_taxonomy, 1):
-            print(f"Assessing exception {i}/{len(exception_taxonomy)}: {exception_data['exception_id']}")
+        all_exceptions_result = assess_all_exceptions_step(
+            policy_pages,
+            exception_taxonomy,
+            COMMITMENT_ID,
+            formatted_references,
+            commitment_guidelines,
+            assessment_date
+        )
 
-            exception_result = assess_exception_step(
-                policy_pages,
-                exception_data,
-                COMMITMENT_ID,
-                formatted_references,
-                commitment_guidelines,
-                assessment_date
-            )
+        exceptions_results = all_exceptions_result['exceptions']
 
-            # Only include references if the exception applies
+        # Clean up references for exceptions that don't apply
+        for exception_result in exceptions_results:
             if not exception_result['applies']:
                 exception_result['references'] = []
 
-            exceptions_results.append(exception_result)
-
-            print(f"  - Applies: {exception_result['applies']}")
+        # Print summary
+        print(f"\n=== EXCEPTIONS SUMMARY ===")
+        for exception_result in exceptions_results:
+            print(f"  - {exception_result['exception_id']}: Applies={exception_result['applies']}", end="")
             if exception_result['applies']:
-                print(f"  - Mitigated: {exception_result['mitigated']}")
+                print(f", Mitigated={exception_result['mitigated']}")
+            else:
+                print()
     else:
         print("\n=== STEP 2: SKIPPED (No commitment found) ===")
 
@@ -333,4 +296,4 @@ def run_two_step_analysis():
     return final_assessment
 
 if __name__ == "__main__":
-    run_two_step_analysis()
+    run_two_step_simple_analysis()
