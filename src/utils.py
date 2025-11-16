@@ -3,6 +3,68 @@ import unicodedata
 import re
 import os
 import fitz
+from dotenv import load_dotenv
+from openai import OpenAI, RateLimitError
+from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
+import json
+
+def get_openai_client():
+    """
+    Initialize and return an OpenAI client with API key from environment.
+
+    Returns:
+        OpenAI: Configured OpenAI client instance
+    """
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    return OpenAI(api_key=api_key)
+
+# Pre-configured retry decorator for OpenAI API calls
+openai_retry = retry(
+    wait=wait_random_exponential(min=1, max=60),
+    stop=stop_after_attempt(6),
+    retry=retry_if_exception_type(RateLimitError)
+)
+
+def print_debug_section(title, content=None, sections=None, enabled=True):
+    """
+    Print formatted debug output with consistent styling.
+
+    Args:
+        title: Main title for the debug section
+        content: Single content block to print (optional)
+        sections: Dictionary of {section_name: section_content} for multiple sections (optional)
+        enabled: Whether to actually print (controlled by debug flags)
+
+    Usage:
+        # Single content block
+        print_debug_section("POLICY PAGES", policy_pages, enabled=policy_debug)
+
+        # Multiple sections
+        print_debug_section("INPUTS", sections={
+            "ASSESSMENT DATE": assessment_date,
+            "COMMITMENT DESCRIPTION": commitment_description
+        }, enabled=input_debug)
+    """
+    if not enabled:
+        return
+
+    print("\n" + "="*80)
+    print(f"DEBUG - {title}")
+    print("="*80)
+
+    if content is not None:
+        print(content)
+    elif sections:
+        for section_name, section_content in sections.items():
+            print(f"\n--- {section_name} ---")
+            # Handle dict/list content by pretty-printing JSON
+            if isinstance(section_content, (dict, list)):
+                print(json.dumps(section_content, indent=2))
+            else:
+                print(section_content)
+
+    print("="*80 + "\n")
 
 def load_exceptions(exceptions_csv_path, exceptions_criteria_csv_path, commitment_id):
       """

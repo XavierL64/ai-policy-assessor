@@ -1,39 +1,25 @@
 import os
-from dotenv import load_dotenv
-from openai import OpenAI, RateLimitError
-from utils import load_commitment, load_exceptions, load_pdf_pages, build_page_pack, get_exception_examples, interactive_reference_selector
-from function_schema_two_step import assess_commitment_schema, assess_exception_schema
-from prompt_two_step import build_commitment_prompt, build_exception_prompt
+import sys
+from pathlib import Path
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from openai import RateLimitError
+from utils import (load_commitment, load_exceptions, load_pdf_pages, build_page_pack,
+                   get_exception_examples, interactive_reference_selector,
+                   get_openai_client, openai_retry, print_debug_section)
+from .function_schema import assess_commitment_schema, assess_exception_schema
+from .prompt import build_commitment_prompt, build_exception_prompt
 from config import assessment_date
 import json
-from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
-
-# Load environment variables
-load_dotenv()
-
-# Get the API key from the environment
-api_key = os.getenv("OPENAI_API_KEY")
 
 # Create OpenAI client
-client = OpenAI(api_key=api_key)
+client = get_openai_client()
 
-# configuration variables
-COMMITMENT_ID = "CP.2"
-PDF_SOURCE = "sources/Barclays/Climate change statement (Feb 2024).pdf"
-MODEL_NAME = "gpt-4.1"
-POLICY_DEBUG = False  # Set to True to print policy pages in commitment evaluation
-INPUT_DEBUG = False   # Set to True to print other inputs in both evaluation steps
-INTERACTIVE_MODE = True  # Set to True to manually select and edit commitment references
 
-# Global token counter
-total_tokens_used = 0
-
-@retry(
-    wait=wait_random_exponential(min=1, max=60),
-    stop=stop_after_attempt(6),
-    retry=retry_if_exception_type(RateLimitError)
-)
-def assess_commitment_step(policy_pages, commitment_description, commitment_guidelines, commitment_examples, assessment_date):
+def assess_commitment_step(policy_pages, commitment_description, commitment_guidelines, commitment_examples,
+                           model_name, policy_debug, input_debug, total_tokens_counter):
     """
     Step 1: Assess whether the policy contains a commitment.
     """
@@ -73,51 +59,39 @@ Commitment examples:
     ]
 
     # Debug prints
-    if POLICY_DEBUG:
-        print("\n" + "="*80)
-        print("DEBUG - POLICY PAGES (COMMITMENT STEP)")
-        print("="*80)
-        print(policy_pages)
-        print("="*80 + "\n")
+    print_debug_section("POLICY PAGES (COMMITMENT STEP)", content=policy_pages, enabled=policy_debug)
 
-    if INPUT_DEBUG:
-        print("\n" + "="*80)
-        print("DEBUG - INPUTS (COMMITMENT STEP)")
-        print("="*80)
-        print("\n--- COMMITMENT DESCRIPTION ---")
-        print(commitment_description)
-        print("\n--- COMMITMENT GUIDELINES ---")
-        print(commitment_guidelines)
-        print("\n--- COMMITMENT EXAMPLES ---")
-        print(commitment_examples)
-        print("="*80 + "\n")
+    print_debug_section("INPUTS (COMMITMENT STEP)", sections={
+        "COMMITMENT DESCRIPTION": commitment_description,
+        "COMMITMENT GUIDELINES": commitment_guidelines,
+        "COMMITMENT EXAMPLES": commitment_examples
+    }, enabled=input_debug)
 
-    # Create chat completion for commitment assessment
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=messages,
-        tools=assess_commitment_schema,
-        tool_choice={
-            "type": "function",
-            "function": {"name": "assess_commitment"}
-        },
-        temperature=0
-    )
+    @openai_retry
+    def make_api_call():
+        # Create chat completion for commitment assessment
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=messages,
+            tools=assess_commitment_schema,
+            tool_choice={
+                "type": "function",
+                "function": {"name": "assess_commitment"}
+            },
+            temperature=0
+        )
 
-    # Track token usage
-    global total_tokens_used
-    total_tokens_used += response.usage.total_tokens
+        # Track token usage
+        total_tokens_counter['count'] += response.usage.total_tokens
 
-    # Parse the response
-    raw_output = response.choices[0].message.tool_calls[0].function.arguments
-    return json.loads(raw_output)
+        # Parse the response
+        raw_output = response.choices[0].message.tool_calls[0].function.arguments
+        return json.loads(raw_output)
 
-@retry(
-    wait=wait_random_exponential(min=1, max=60),
-    stop=stop_after_attempt(6),
-    retry=retry_if_exception_type(RateLimitError)
-)
-def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_references, commitment_guidelines, assessment_date):
+    return make_api_call()
+
+def assess_exception_step(policy_pages, exception_data, commitment_id, commitment_references,
+                          commitment_guidelines, assessment_date, model_name, input_debug, total_tokens_counter):
     """
     Step 2: Assess whether a specific exception applies and if it is mitigated.
     """
@@ -194,64 +168,73 @@ Mitigant examples:
     ]
 
     # Debug prints
-    if INPUT_DEBUG:
-        print("\n" + "="*80)
-        print(f"DEBUG - INPUTS (EXCEPTION STEP: {exception_data['exception_id']})")
-        print("="*80)
-        print("\n--- ASSESSMENT DATE ---")
-        print(assessment_date)
-        print("\n--- COMMITMENT REFERENCES ---")
-        print(commitment_references)
-        print("\n--- COMMITMENT GUIDELINES ---")
-        print(commitment_guidelines)
-        print("\n--- EXCEPTION ID ---")
-        print(exception_data['exception_id'])
-        print("\n--- EXCEPTION DEFINITION ---")
-        print(exception_data['exception_definition'])
-        print("\n--- MITIGANT ---")
-        print(exception_data['mitigant'])
-        print("\n--- MITIGANT DEFINITION ---")
-        print(exception_data.get('mitigant_definition', 'n/a'))
-        print("\n--- EXCEPTION EXAMPLES ---")
-        print(examples['exception_examples'])
-        print("\n--- MITIGANT EXAMPLES ---")
-        print(examples['mitigant_examples'])
-        print("="*80 + "\n")
+    print_debug_section(f"INPUTS (EXCEPTION STEP: {exception_data['exception_id']})", sections={
+        "ASSESSMENT DATE": assessment_date,
+        "COMMITMENT REFERENCES": commitment_references,
+        "COMMITMENT GUIDELINES": commitment_guidelines,
+        "EXCEPTION ID": exception_data['exception_id'],
+        "EXCEPTION DEFINITION": exception_data['exception_definition'],
+        "MITIGANT": exception_data['mitigant'],
+        "MITIGANT DEFINITION": exception_data.get('mitigant_definition', 'n/a'),
+        "EXCEPTION EXAMPLES": examples['exception_examples'],
+        "MITIGANT EXAMPLES": examples['mitigant_examples']
+    }, enabled=input_debug)
 
-    # Create chat completion for exception assessment
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=messages,
-        tools=assess_exception_schema,
-        tool_choice={
-            "type": "function",
-            "function": {"name": "assess_exception"}
-        },
-        temperature=0
-    )
+    @openai_retry
+    def make_api_call():
+        # Create chat completion for exception assessment
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=messages,
+            tools=assess_exception_schema,
+            tool_choice={
+                "type": "function",
+                "function": {"name": "assess_exception"}
+            },
+            temperature=0
+        )
 
-    # Track token usage
-    global total_tokens_used
-    total_tokens_used += response.usage.total_tokens
+        # Track token usage
+        total_tokens_counter['count'] += response.usage.total_tokens
 
-    # Parse the response
-    raw_output = response.choices[0].message.tool_calls[0].function.arguments
-    return json.loads(raw_output)
+        # Parse the response
+        raw_output = response.choices[0].message.tool_calls[0].function.arguments
+        return json.loads(raw_output)
 
-def run_two_step_analysis():
+    return make_api_call()
+
+def run_two_step_analysis(commitment_id="CP.2",
+                          pdf_source="sources/Barclays/Climate change statement (Feb 2024).pdf",
+                          model_name="gpt-4o",
+                          policy_debug=False,
+                          input_debug=False,
+                          interactive_mode=True):
     """
-    Main function to run the two-step analysis approach.
+    Assess commitment first, then each exception individually
+
+    Args:
+        commitment_id: ID of the commitment to assess
+        pdf_source: Path to the PDF file to assess
+        model_name: OpenAI model to use
+        policy_debug: Whether to print policy pages
+        input_debug: Whether to print other inputs
+        interactive_mode: Whether to manually select and edit commitment references
+
+    Returns:
+        dict: Final assessment with commitment and exceptions
     """
+    # Token counter (using dict to allow modification in nested functions)
+    total_tokens_counter = {'count': 0}
 
     # Load commitment and exceptions
-    commitment = load_commitment(COMMITMENT_ID, "criteria/criteria.csv")
+    commitment = load_commitment(commitment_id, "criteria/criteria.csv")
     commitment_description = commitment['commitment_description']
     commitment_guidelines = commitment['commitment_guidelines']
     commitment_examples = commitment['commitment_examples']
-    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", COMMITMENT_ID)
+    exception_taxonomy = load_exceptions("exceptions/exceptions.csv", "exceptions/exceptions_criteria.csv", commitment_id)
 
     # Load and prepare policy pages
-    pages = load_pdf_pages(PDF_SOURCE)
+    pages = load_pdf_pages(pdf_source)
     policy_pages = build_page_pack(pages)
 
     print("=== STEP 1: ASSESSING COMMITMENT ===")
@@ -262,7 +245,10 @@ def run_two_step_analysis():
         commitment_description,
         commitment_guidelines,
         commitment_examples,
-        assessment_date
+        model_name,
+        policy_debug,
+        input_debug,
+        total_tokens_counter
     )
 
     print(f"Commitment: {commitment_result['commitment']}")
@@ -272,7 +258,7 @@ def run_two_step_analysis():
     formatted_references = ""
     selected_references = []
     if commitment_result['references']:
-        if INTERACTIVE_MODE:
+        if interactive_mode:
             # Interactive mode: let user select and edit references
             formatted_references, selected_references = interactive_reference_selector(commitment_result['references'])
         else:
@@ -297,10 +283,13 @@ def run_two_step_analysis():
             exception_result = assess_exception_step(
                 policy_pages,
                 exception_data,
-                COMMITMENT_ID,
+                commitment_id,
                 formatted_references,
                 commitment_guidelines,
-                assessment_date
+                assessment_date,
+                model_name,
+                input_debug,
+                total_tokens_counter
             )
 
             # Only include references if the exception applies
@@ -328,9 +317,17 @@ def run_two_step_analysis():
     print("\n=== FINAL ASSESSMENT ===")
     print(json.dumps(final_assessment, indent=2))
 
-    print(f"\n=== TOTAL TOKENS USED: {total_tokens_used} ===")
+    print(f"\n=== TOTAL TOKENS USED: {total_tokens_counter['count']} ===")
 
     return final_assessment
 
 if __name__ == "__main__":
-    run_two_step_analysis()
+    # Default configuration for standalone execution
+    run_two_step_analysis(
+        commitment_id="CP.2",
+        pdf_source="sources/Barclays/Climate change statement (Feb 2024).pdf",
+        model_name="gpt-4o",
+        policy_debug=False,
+        input_debug=False,
+        interactive_mode=True
+    )
