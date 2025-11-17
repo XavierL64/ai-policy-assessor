@@ -4,10 +4,10 @@ PDF_SOURCE = "policies/ABN/Exclusion list (Mar 2021).pdf"
 
 # Run config
 APPROACH = "two_step" # Choose from "single_step", "two_step_simple", "two_step"
-MODEL_NAME = "gpt-4o"
+MODEL_NAME = "gpt-4.1"
 POLICY_DEBUG = False  # Set to True to print policy pages
 INPUT_DEBUG = False   # Set to True to print other inputs
-INTERACTIVE_MODE = True  # Set to True to manually select and edit commitment references
+INTERACTIVE_MODE = False  # Set to True to manually select and edit commitment references (not applicable for single_step)
 
 if __name__ == "__main__":
     print(f"\n{'='*80}")

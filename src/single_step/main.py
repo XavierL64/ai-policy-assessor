@@ -162,6 +162,16 @@ Exception taxonomy:
 
     print(filtered_assessment)
 
+    # # Load original pages for reference validation
+    # original_pages = load_pdf_pages(pdf_source)
+
+    # # Validate references against original document
+    # validated_assessment = validate_references(filtered_assessment, original_pages)
+
+    # # Print the final processed output
+    # print("=== FILTERED AND VALIDATED ASSESSMENT ===")
+    # print(json.dumps(validated_assessment, indent=2))
+
     print(f"\n=== TOTAL TOKENS USED: {total_tokens_used} ===")
 
     return filtered_assessment

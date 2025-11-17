@@ -1,31 +1,23 @@
-# AI Policy Assessor
+# AI Policy Assessor (prototype)
 
-An AI-powered tool for assessing bank financing policies against environmental commitment criteria, specifically focusing on thermal coal-related commitments and exceptions.
+Am AI-powered tool that evaluates bank fossil fuel policies against defined assessment criteria. The project explores how large language models (LLMs) can support automated policy analysis by extracting commitments, identifying exceptions, validating references, and producing structured, machine-readable outputs.
 
 ## Overview
 
-This tool uses OpenAI's language models to automatically analyze bank policy documents (PDFs) and determine whether they meet specific environmental commitments related to coal power financing. The assessment process checks for both the presence of commitments and identifies any exceptions or loopholes that may weaken them.
+This prototype uses the OpenAI API with structured function-calling to ensure consistent JSON outputs across different assessment steps. Policy documents (PDFs) are ingested and normalised before being passed to the model, which evaluates whether a specified commitment is present. The tool then scans for exceptions and possible mitigants using a custom exception taxonomy.
 
-## Features
+Three assessment approaches involving one or mutlitple API calls are currently being tested for performance and reliability.
 
-- **Multiple Assessment Approaches**: Choose from three different assessment methodologies:
-  - `single_step`: All assessments in one API call
-  - `two_step`: Separate commitment and exception assessments
-  - `two_step_simple`: Simplified two-step approach
-
-- **Interactive Reference Selection**: Manually review and edit extracted policy references
-- **Exception Analysis**: Automatically identifies policy exceptions and whether they're mitigated
-- **Structured Output**: JSON-formatted results with commitment status and exception details
-- **Token Usage Tracking**: Monitor API costs with built-in token counting
+The tool is still under active development. This prototype focuses on a subset of assessment criteria related to thermal coal power, with additional themes (e.g., coal mining, oil & gas) planned for future iterations following the initial testing phase.
 
 ## Project Structure
 
 ```
 ai-policy-assessor/
 ├── src/
-│   ├── single_step/          # Single API call assessment
-│   ├── two_step/              # Two-step assessment (commitment + exceptions)
-│   ├── two_step_simple/       # Simplified two-step approach
+│   ├── single_step/           # Single API call assessment
+│   ├── two_step/              # Two-step assessment (commitment + exceptions (multiple API calls))
+│   ├── two_step_simple/       # Two-step assessment (commitment + exceptions)
 │   ├── examples/              # Sample outputs and assessment examples
 │   ├── utils.py               # Shared utilities
 │   ├── config.py              # Configuration and assessment date
@@ -36,6 +28,147 @@ ai-policy-assessor/
 ├── data/                      # Output data and results
 └── requirements.txt           # Python dependencies
 ```
+
+## Inputs
+
+### Commitments
+
+The prototype currently supports two main commitments (defined in `criteria/criteria.csv`)
+
+### Exceptions
+
+The prototype includes an exception taxonomy defining loopholes that may weaken commitments (defined in `exceptions\exceptions.csv`)
+
+Each exception can be mitigated or unmitigated based on specific criteria (defined in `exceptions/exceptions_criteria.csv`).
+
+### Policy Sources
+
+Place bank policy PDFs in the `policies/` directory, organized by bank name:
+
+```
+policies/
+├── ABN/
+├── Barclays/
+├── BBVA/
+├── Credit Agricole/
+├── Danske Bank/
+└── HSBC/
+```
+
+## Output
+
+The assessment produces JSON output with:
+- Commitment status (true/false)
+- List of applicable exceptions
+- Mitigation status for each exception
+- Supporting references from the policy
+
+Example output:
+```json
+{
+  "commitment": {
+    "value": true,
+    "references": [
+      {
+        "page": 3,
+        "excerpt": "The bank will not finance new coal power plants..."
+      }
+    ]
+  },
+  "exceptions": [
+    {
+      "exception_id": "CP.EX.2",
+      "applies": true,
+      "mitigated": false,
+      "references": [...]
+    }
+  ]
+}
+```
+The tool also returns total tokens used separately.
+
+## Usage
+
+## Configuration Options
+
+In `src\run_assessment.py`:
+- `COMMITMENT_ID`: Which commitment to assess
+- `PDF_SOURCE`: Path to policy PDF
+- `APPROACH`: Assessment approach
+- `MODEL_NAME`: OpenAI model (e.g., "gpt-4o", "gpt-4.1")
+- `POLICY_DEBUG`: Print policy pages for debugging
+- `INPUT_DEBUG`: Print input prompts for debugging
+- `INTERACTIVE_MODE`: Enable manual reference selection (not applicable for single step approach)
+
+### Assessment Approaches
+
+**Single Step** (`single_step`):
+- Assesses commitment and all exceptions in one API call
+- Can use few-shot examples
+
+**Two Step Simple** (`two_step_simple`):
+- Step 1: Assess if commitment exists in one API call
+- Step 2: Assesses all exceptions for that commitment if it exists in one API call
+
+**Two Step** (`two_step`):
+- Step 1: Assess if commitment exists in one API call
+- Step 2: Assesses each exception individually for that commitment if it exists through multiple API calls
+
+### Interactive Mode
+
+When `INTERACTIVE_MODE = True`, you can:
+- Review extracted policy references
+- Select which references to include in the final assessment
+- Edit reference text before processing
+- Skip irrelevant references
+
+### Run the assessment
+
+   ```bash
+   python src/run_assessment.py
+   ```
+
+### Running Individual Modules
+
+You can also run assessment approaches directly:
+
+```bash
+# Run single-step assessment
+python src/single_step/main.py
+
+# Run two-step assessment
+python src/two_step/main.py
+
+# Run two-step simple assessment
+python src/two_step_simple/main.py
+```
+
+## PDF Text Extraction Strategy
+
+The prototype uses **PyMuPDF (fitz)** to extract text from PDF policy documents. The extraction process includes:
+
+1. **Page-by-Page Extraction**: Each PDF page is processed individually with metadata:
+   - Document name (PDF filename without extension)
+   - Page number (1-indexed)
+   - Extracted text content
+
+2. **Text Normalization**: Extracted text undergoes normalization to improve accuracy:
+   - Line ending standardization
+   - Unicode normalization (NFKC)
+   - Hyphenated word rejoining across line breaks
+   - Whitespace cleanup (collapse spaces/tabs, limit consecutive newlines)
+   - This ensures consistent text matching and comparison
+
+3. **Context Building**: Pages are concatenated with clear delimiters:
+   ```
+   === DOC: <document_name> | PAGE: <n> ===
+   <page_text>
+   ```
+   This format helps the AI model understand document structure and page boundaries.
+
+4. **Reference Validation (Experimental)**: Verify that AI-extracted policy references actually exist in the original PDF and are accurately quoted.
+
+An optional reference validation feature is available (currently implemented for the `single_step` approach only)
 
 ## Installation
 
@@ -63,180 +196,7 @@ ai-policy-assessor/
    OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-## Usage
-
-### Quick Start
-
-1. **Configure the assessment** in `src/config.py`:
-   ```python
-   COMMITMENT_ID = "CP.1"  # or "CP.2"
-   PDF_SOURCE = "policies/ABN/Exclusion list (Mar 2021).pdf"
-   APPROACH = "two_step"  # Choose: single_step, two_step_simple, two_step
-   MODEL_NAME = "gpt-4o"
-   INTERACTIVE_MODE = True
-   ```
-
-2. **Run the assessment**:
-   ```bash
-   python src/run_assessment.py
-   ```
-
-### Assessment Approaches
-
-**Single Step** (`single_step`):
-- Assesses commitment and all exceptions in one API call
-- Faster and more cost-effective
-- Uses comprehensive few-shot examples
-
-**Two Step** (`two_step`):
-- Step 1: Assess if commitment exists
-- Step 2: Individually assess each exception
-- More granular control and debugging
-- Higher token usage
-
-**Two Step Simple** (`two_step_simple`):
-- Simplified version of two-step approach
-- Balanced between speed and accuracy
-
-### Interactive Mode
-
-When `INTERACTIVE_MODE = True`, you can:
-- Review extracted policy references
-- Select which references to include in the final assessment
-- Edit reference text before processing
-- Skip irrelevant references
-
-### Running Individual Modules
-
-You can also run assessment approaches directly:
-
-```bash
-# Run single-step assessment
-python src/single_step/main.py
-
-# Run two-step assessment
-python src/two_step/main.py
-
-# Run two-step simple assessment
-python src/two_step_simple/main.py
-```
-
-## Commitments
-
-The tool currently supports two main commitments (defined in `criteria/criteria.csv`):
-
-**CP.1**: Coal Power Project Finance
-- Does the bank prohibit dedicated financing for thermal coal power plants?
-- Covers project-specific financing, direct loans, dedicated financing
-
-**CP.2**: Coal Power Corporate Finance
-- Does the bank restrict general corporate purpose finance based on revenue/generation thresholds?
-- Covers corporate loans and general purpose financing
-
-## Exceptions
-
-The tool identifies common policy exceptions that may weaken commitments:
-
-- **Geographic limitations**: Exclusions only applying to specific regions
-- **Transition plans**: Exemptions for clients with transition/phase-out plans
-- **Ringfenced financing**: Exemptions for sustainable activity financing
-- **Capacity replacements**: Exclusions not covering like-for-like replacements
-- And more...
-
-Each exception can be mitigated or unmitigated based on specific criteria defined in `exceptions/exceptions_criteria.csv`.
-
-## Policy Sources
-
-Place bank policy PDFs in the `policies/` directory, organized by bank name:
-
-```
-policies/
-├── ABN/
-├── Barclays/
-├── BBVA/
-├── Credit Agricole/
-├── Danske Bank/
-└── HSBC/
-```
-
-## Output
-
-The assessment produces JSON output with:
-- Commitment status (true/false)
-- Supporting references from the policy
-- List of applicable exceptions
-- Mitigation status for each exception
-- Total tokens used
-
-Example output:
-```json
-{
-  "commitment": {
-    "value": true,
-    "references": [
-      {
-        "page": 3,
-        "excerpt": "The bank will not finance new coal power plants..."
-      }
-    ]
-  },
-  "exceptions": [
-    {
-      "exception_id": "CP.EX.2",
-      "applies": true,
-      "mitigated": false,
-      "references": [...]
-    }
-  ]
-}
-```
-
-## Configuration Options
-
-In `src/config.py`:
-- `COMMITMENT_ID`: Which commitment to assess
-- `PDF_SOURCE`: Path to policy PDF
-- `APPROACH`: Assessment methodology
-- `MODEL_NAME`: OpenAI model (e.g., "gpt-4o", "gpt-4-turbo")
-- `POLICY_DEBUG`: Print policy pages for debugging
-- `INPUT_DEBUG`: Print input prompts for debugging
-- `INTERACTIVE_MODE`: Enable manual reference selection
-
-## Development
-
-### Adding New Commitments
-
-1. Add commitment definition to `criteria/criteria.csv`
-2. Define relevant exceptions in `exceptions/exceptions.csv`
-3. Add exception examples in `exceptions/exceptions_criteria.csv`
-
-### Debugging
-
-Enable debug modes in `config.py`:
-```python
-POLICY_DEBUG = True   # View policy pages sent to API
-INPUT_DEBUG = True    # View all input parameters
-```
-
 ## Dependencies
-
-Key dependencies:
-- `openai`: OpenAI API client
-- `pymupdf`: PDF parsing
-- `pandas`: Data handling
-- `python-dotenv`: Environment variable management
-- `jupyterlab`: Optional, for notebook development
 
 See `requirements.txt` for full list.
 
-## License
-
-[Add your license information here]
-
-## Contributing
-
-[Add contribution guidelines here]
-
-## Contact
-
-[Add contact information here]
