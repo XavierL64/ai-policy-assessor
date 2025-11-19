@@ -1,6 +1,6 @@
 # AI Policy Assessor (prototype)
 
-Am AI-powered tool that evaluates bank fossil fuel policies against defined assessment criteria. The project explores how large language models (LLMs) can support automated policy analysis by extracting commitments, identifying exceptions, validating references, and producing structured, machine-readable outputs.
+An AI-powered tool that evaluates bank fossil fuel policies against defined assessment criteria. The project explores how large language models (LLMs) can support automated policy analysis by extracting commitments, identifying exceptions, validating references, and producing structured, machine-readable outputs.
 
 ## Overview
 
