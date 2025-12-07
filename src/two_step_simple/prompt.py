@@ -28,10 +28,10 @@ Follow these steps:
 
 2. Provide references
 - If `"commitment"` is true, include at least one supporting reference with:
-	○ "excerpt": verbatim text quoted from `policy_pages`,
-	○ "document_name": the value shown after `DOC:` in the header,
-	○ "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
-	○ "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
+  - "excerpt": verbatim text quoted from `policy_pages`,
+  - "document_name": the value shown after `DOC:` in the header,
+  - "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
+  - "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
 - If `"commitment"` is false, return `references: []`.
 """
 
@@ -65,19 +65,19 @@ Follow these steps:
 
 1. Assess each exception in the taxonomy
 - For each exception, return:
-	○ "exception_id": ID from the taxonomy.  
-	○ "applies": true if the exception applies, otherwise false. 
-	○ "description": short description ≤ {DESCRIPTION_LENGTH} words if applies, else null.
-	○ "mitigated": true if a mitigant clearly applies, else false. Only evaluate if "mitigant" is True.  
-	○ "mitigant": short description ≤ {DESCRIPTION_LENGTH} words if mitigated, else null. 
+  - "exception_id": ID from the taxonomy.
+  - "applies": true if the exception applies, otherwise false.
+  - "description": short description <= {DESCRIPTION_LENGTH} words if applies, else null.
+  - "mitigated": true if a mitigant clearly applies, else false. Only evaluate if "mitigant" is True.
+  - "mitigant": short description <= {DESCRIPTION_LENGTH} words if mitigated, else null.
 - If `"commitment"` is false, return `"exceptions": []`.
 
 2. Provide references
 - For each positive finding (exception `"applies"` or `"mitigated"` is true), include at least one supporting reference with:
-	○ "excerpt": verbatim text quoted from `policy_pages`,
-	○ "document_name": the value shown after `DOC:` in the header,
-	○ "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
-	○ "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
+  - "excerpt": verbatim text quoted from `policy_pages`,
+  - "document_name": the value shown after `DOC:` in the header,
+  - "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
+  - "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
 - If no positive findings exist for an exception, return `references: []`.
 """
 

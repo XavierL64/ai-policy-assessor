@@ -420,3 +420,44 @@ def interactive_reference_selector(references):
     print("="*80)
 
     return formatted_reference, selected_refs
+
+
+def flatten_assessment(result, commitment_id):
+    """
+    Flatten an assessment result into a single dict suitable for tabular export.
+    Columns follow the function schema fields for commitment and exceptions.
+    Supports both two-step structure (commitment.value) and single-step structure.
+    """
+    row = {"commitment_id": commitment_id}
+
+    commit_block = result.get("commitment", {})
+    if isinstance(commit_block, dict) and "value" in commit_block:
+        commit_value = commit_block.get("value")
+        commit_refs = commit_block.get("references", []) or []
+    else:
+        # single-step style: commitment as bool, references at top-level
+        commit_value = commit_block if isinstance(commit_block, bool) else result.get("commitment")
+        commit_refs = result.get("references", []) or []
+
+    row["commitment_value"] = commit_value
+    row["commitment_ref_count"] = len(commit_refs)
+    row["commitment_ref_text"] = " | ".join(
+        f'{r.get("document_name","")}:p{r.get("page_start","?")}-{r.get("page_end","?")} {r.get("excerpt","")}'.strip()
+        for r in commit_refs
+    )
+
+    for exc in result.get("exceptions", []) or []:
+        exc_id = exc.get("exception_id", "EX").replace(".", "_")
+        prefix = exc_id
+        row[f"{prefix}_applies"] = exc.get("applies")
+        row[f"{prefix}_description"] = exc.get("description")
+        row[f"{prefix}_mitigated"] = exc.get("mitigated")
+        row[f"{prefix}_mitigant"] = exc.get("mitigant")
+        exc_refs = exc.get("references", []) or []
+        row[f"{prefix}_ref_count"] = len(exc_refs)
+        row[f"{prefix}_ref_text"] = " | ".join(
+            f'{r.get("document_name","")}:p{r.get("page_start","?")}-{r.get("page_end","?")} {r.get("excerpt","")}'.strip()
+            for r in exc_refs
+        )
+
+    return row

@@ -6,7 +6,7 @@ An AI-powered tool that evaluates bank fossil fuel policies against defined asse
 
 This prototype uses the OpenAI API with structured function-calling to ensure consistent JSON outputs across different assessment steps. Policy documents (PDFs) are ingested and normalised before being passed to the model, which evaluates whether a specified commitment is present. The tool then scans for exceptions and possible mitigants using a custom exception taxonomy.
 
-Three assessment approaches involving one or mutlitple API calls are currently being tested for performance and reliability.
+Three assessment approaches involving one or multiple API calls are currently being tested for performance and reliability.
 
 The tool is still under active development. This prototype focuses on a subset of assessment criteria related to thermal coal power, with additional themes (e.g., coal mining, oil & gas) planned for future iterations following the initial testing phase.
 
@@ -14,19 +14,19 @@ The tool is still under active development. This prototype focuses on a subset o
 
 ```
 ai-policy-assessor/
-├── src/
-│   ├── single_step/           # Single API call assessment
-│   ├── two_step/              # Two-step assessment (commitment + exceptions (multiple API calls))
-│   ├── two_step_simple/       # Two-step assessment (commitment + exceptions)
-│   ├── examples/              # Sample outputs and assessment examples
-│   ├── utils.py               # Shared utilities
-│   ├── config.py              # Configuration and assessment date
-│   └── run_assessment.py      # Main entry point
-├── policies/                  # Bank policy PDFs (organized by bank)
-├── criteria/                  # Commitment definitions and criteria
-├── exceptions/                # Exception taxonomy and criteria
-├── data/                      # Output data and results
-└── requirements.txt           # Python dependencies
+|- src/
+|  |- single_step/           # Single API call assessment
+|  |- two_step/              # Two-step assessment (commitment + exceptions (multiple API calls))
+|  |- two_step_simple/       # Two-step assessment (commitment + exceptions)
+|  |- examples/              # Sample outputs and assessment examples
+|  |- utils.py               # Shared utilities
+|  |- config.py              # Configuration and assessment date
+|  |- run_assessment.py      # Main entry point
+|- policies/                 # Bank policy PDFs (organized by bank)
+|- criteria/                 # Commitment definitions and criteria
+|- exceptions/               # Exception taxonomy and criteria
+|- data/                     # Output data and results
+|- requirements.txt          # Python dependencies
 ```
 
 ## Inputs
@@ -37,7 +37,7 @@ The prototype currently supports two main commitments (defined in `criteria/crit
 
 ### Exceptions
 
-The prototype includes an exception taxonomy defining loopholes that may weaken commitments (defined in `exceptions\exceptions.csv`)
+The prototype includes an exception taxonomy defining loopholes that may weaken commitments (defined in `exceptions\\exceptions.csv`)
 
 Each exception can be mitigated or unmitigated based on specific criteria (defined in `exceptions/exceptions_criteria.csv`).
 
@@ -47,12 +47,12 @@ Place bank policy PDFs in the `policies/` directory, organized by bank name:
 
 ```
 policies/
-├── ABN/
-├── Barclays/
-├── BBVA/
-├── Credit Agricole/
-├── Danske Bank/
-└── HSBC/
+|- ABN/
+|- Barclays/
+|- BBVA/
+|- Credit Agricole/
+|- Danske Bank/
+|- HSBC/
 ```
 
 ## Output
@@ -91,7 +91,7 @@ The tool also returns total tokens used separately.
 
 ## Configuration Options
 
-In `src\run_assessment.py`:
+In `src\\run_assessment.py`:
 - `COMMITMENT_ID`: Which commitment to assess
 - `PDF_SOURCE`: Path to policy PDF
 - `APPROACH`: Assessment approach
@@ -124,9 +124,9 @@ When `INTERACTIVE_MODE = True`, you can:
 
 ### Run the assessment
 
-   ```bash
-   python src/run_assessment.py
-   ```
+```bash
+python src/run_assessment.py
+```
 
 ### Running Individual Modules
 
@@ -181,7 +181,7 @@ An optional reference validation feature is available (currently implemented for
 2. **Create a virtual environment**
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # On Windows: venv\\Scripts\\activate
    ```
 
 3. **Install dependencies**
@@ -199,4 +199,3 @@ An optional reference validation feature is available (currently implemented for
 ## Dependencies
 
 See `requirements.txt` for full list.
-

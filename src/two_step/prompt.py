@@ -28,10 +28,10 @@ Follow these steps:
 
 2. Provide references
 - If `"commitment"` is true, include at least one supporting reference with:
-	○ "excerpt": verbatim text quoted from `policy_pages`,
-	○ "document_name": the value shown after `DOC:` in the header,
-	○ "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
-	○ "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
+  - "excerpt": verbatim text quoted from `policy_pages`,
+  - "document_name": the value shown after `DOC:` in the header,
+  - "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
+  - "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
 - If `"commitment"` is false, return `references: []`.
 """
 
@@ -72,19 +72,19 @@ Follow these steps:
 1. Assess exception
 - Set `"applies": true` if the exception applies, otherwise false.
 - Set `"applies": false` if the exception is identified but doesn't apply to the commitment previously identified.
-- If `"applies"` is true, provide a description (≤ {DESCRIPTION_LENGTH} words).
+- If `"applies"` is true, provide a description (<= {DESCRIPTION_LENGTH} words).
 
 2. Assess mitigant
 - Only evaluate if `"mitigant"` is True and `"applies"` is true.
 - Set `"mitigated": true` if a mitigant applies, else false.
-- If `"mitigated"` is true, provide a description (≤ {DESCRIPTION_LENGTH} words).
+- If `"mitigated"` is true, provide a description (<= {DESCRIPTION_LENGTH} words).
 
 3. Provide references
 - For each positive finding (exception `"applies"` or `"mitigated"` is true), include at least one supporting reference with:
-	○ "excerpt": verbatim text quoted from `policy_pages`,
-	○ "document_name": the value shown after `DOC:` in the header,
-	○ "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
-	○ "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
+  - "excerpt": verbatim text quoted from `policy_pages`,
+  - "document_name": the value shown after `DOC:` in the header,
+  - "page_start": the page number where the excerpt starts, as shown after `PAGE:` in the header,
+  - "page_end": the page number where the excerpt ends (same as start if single page), as shown after `PAGE:` in the header.
 - If no positive findings exist, return `references: []`.
 """
 

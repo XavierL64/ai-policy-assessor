@@ -160,7 +160,7 @@ Exception taxonomy:
     # Filter exceptions to only those that apply
     filtered_assessment = filter_exceptions(assessment)
 
-    print(filtered_assessment)
+    print(json.dumps(filtered_assessment, indent=2))
 
     # # Load original pages for reference validation
     # original_pages = load_pdf_pages(pdf_source)

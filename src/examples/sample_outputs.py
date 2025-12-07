@@ -33,7 +33,7 @@ output3 = {
             "applies": True,
             "description": "expansion via corporate mergers and acquisition.",
             "mitigated": True,
-            "mitigant": "client has confirmed phase-out of these assets will be in line with HSBC’s 2030/40 timelines."
+            "mitigant": "client has confirmed phase-out of these assets will be in line with HSBC's 2030/40 timelines."
         },
         {
             "exception_id": "CP.EX13",
