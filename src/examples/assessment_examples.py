@@ -17,98 +17,98 @@ ASSESSMENT_ABN = {
     "commitment": True,
     "exceptions": [
         {
-            "exception_id": "CP.EX1",
+            "exception_id": "CP.EX.1",
             "applies": False,
             "description": None,
             "mitigated": False,
             "mitigant": None
         },
         {
-			"exception_id": "CP.EX4",
+			"exception_id": "CP.EX.4",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX5",
+			"exception_id": "CP.EX.5",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX6",
+			"exception_id": "CP.EX.6",
 			"applies": True,
 			"description": "expansion of existing plants.",
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX9",
+			"exception_id": "CP.EX.9",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX13",
+            "exception_id": "CP.EX.13",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX14",
+            "exception_id": "CP.EX.14",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX15",
+            "exception_id": "CP.EX.15",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX16",
+            "exception_id": "CP.EX.16",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX17",
+            "exception_id": "CP.EX.17",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX19",
+            "exception_id": "CP.EX.19",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX21",
+            "exception_id": "CP.EX.21",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX23",
+            "exception_id": "CP.EX.23",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX26",
+            "exception_id": "CP.EX.26",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -164,106 +164,112 @@ ASSESSMENT_HSBC = {
     "commitment": True,
     "exceptions": [
         {
-            "exception_id": "CP.EX1",
+            "exception_id": "CP.EX.1",
             "applies": False,
             "description": None,
             "mitigated": False,
             "mitigant": None
         },
         {
-			"exception_id": "CP.EX4",
+			"exception_id": "CP.EX.4",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX5",
+			"exception_id": "CP.EX.5",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX6",
+			"exception_id": "CP.EX.6",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX9",
+			"exception_id": "CP.EX.9",
 			"applies": True,
 			"description": "expansion via corporate mergers and acquisition.",
 			"mitigated": True,
 			"mitigant": "client has confirmed phase-out of these assets will be in line with HSBC's 2030/40 timelines."
 		},
         {
-            "exception_id": "CP.EX13",
+            "exception_id": "CP.EX.13",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX14",
+            "exception_id": "CP.EX.14",
 			"applies": True,
 			"description": "expansion that was already contractually committed.",
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX15",
+            "exception_id": "CP.EX.15",
 			"applies": True,
 			"description": "existing captive thermal coal-fired power plants.",
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX16",
+            "exception_id": "CP.EX.16",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX17",
+            "exception_id": "CP.EX.17",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX19",
+            "exception_id": "CP.EX.19",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX21",
+            "exception_id": "CP.EX.21",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX23",
+            "exception_id": "CP.EX.23",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX26",
-			"applies": False,
-			"description": None,
+            "exception_id": "CP.EX.26",
+			"applies": True,
+			"description": "Policy allows undefined exceptions.",
 			"mitigated": False,
 			"mitigant": None
 		},
     ],
     "references": [
         {
+            "excerpt": "In limited cases, HSBC may approve exceptions to this Policy where the proposed transaction may not necessarily align to the criteria set out in the Policy, but HSBC is satisfied that it is within the intention of the Policy (including HSBC’s intention to support clients in their transition away from fossil fuels) and remains in alignment with HSBC’s Phase-Out Commitment (as defined below). This will be subject to enhanced due diligence and pre-approval by a senior risk governance committee and will take into account the facts and circumstances of the particular transaction.",
+            "document_name": "Thermal Coal Phase-out Policy (Feb 2025)",
+            "page_start": 2,
+            "page_end": 2
+        },
+		{
             "excerpt": "HSBC will not provide new finance, or new advisory services, for the specific purposes of activities that do not align with HSBC's Phase Out Commitment timelines as outlined below: -  creation of new thermal coal assets; -  thermal coal expansion; -  extensions to the unabated operating lifetime of existing thermal coal assets; -  new captive thermal coal-fired power plants or new captive thermal coal mines; -  conversion of existing coal-to-gas-fired power plants, unless a) the client demonstrates to HSBC its intention to achieve abated power generation and b) the plants do not operate in environmentally and socially critical areas; -  new thermal coal infrastructure; -  new metallurgical coal mines; or -  thermal coal assets or metallurgical coal mines operating in environmentally and socially critical areas or using Mountaintop Removal (including clients who derive more than 30% of their annual revenues from Mountaintop Removal coal mining).",
             "document_name": "Thermal Coal Phase-out Policy (Feb 2025)",
             "page_start": 4,
@@ -293,98 +299,98 @@ ASSESSMENT_BBVA = {
     "commitment": True,
     "exceptions": [
         {
-            "exception_id": "CP.EX1",
+            "exception_id": "CP.EX.1",
             "applies": False,
             "description": None,
             "mitigated": False,
             "mitigant": None
         },
         {
-			"exception_id": "CP.EX4",
+			"exception_id": "CP.EX.4",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX5",
+			"exception_id": "CP.EX.5",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX6",
+			"exception_id": "CP.EX.6",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX9",
+			"exception_id": "CP.EX.9",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX13",
+            "exception_id": "CP.EX.13",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX14",
+            "exception_id": "CP.EX.14",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX15",
+            "exception_id": "CP.EX.15",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX16",
+            "exception_id": "CP.EX.16",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX17",
+            "exception_id": "CP.EX.17",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX19",
+            "exception_id": "CP.EX.19",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX21",
+            "exception_id": "CP.EX.21",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX23",
+            "exception_id": "CP.EX.23",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX26",
+            "exception_id": "CP.EX.26",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -420,98 +426,98 @@ ASSESSMENT_BARCLAYS = {
     "commitment": True,
     "exceptions": [
         {
-            "exception_id": "CP.EX1",
+            "exception_id": "CP.EX.1",
             "applies": False,
             "description": None,
             "mitigated": False,
             "mitigant": None
         },
         {
-			"exception_id": "CP.EX4",
+			"exception_id": "CP.EX.4",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX5",
+			"exception_id": "CP.EX.5",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX6",
+			"exception_id": "CP.EX.6",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
 		{
-			"exception_id": "CP.EX9",
+			"exception_id": "CP.EX.9",
+			"applies": True,
+			"description": "M&A expansions not covered by exclusion.",
+			"mitigated": False,
+			"mitigant": None
+		},
+        {
+            "exception_id": "CP.EX.13",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX13",
+            "exception_id": "CP.EX.14",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX14",
+            "exception_id": "CP.EX.15",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX15",
+            "exception_id": "CP.EX.16",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX16",
+            "exception_id": "CP.EX.17",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX17",
+            "exception_id": "CP.EX.19",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX19",
+            "exception_id": "CP.EX.21",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX21",
-			"applies": False,
-			"description": None,
-			"mitigated": False,
-			"mitigant": None
-		},
-        {
-            "exception_id": "CP.EX23",
+            "exception_id": "CP.EX.23",
 			"applies": True,
 			"description": "expansion that doesn't increase production by more than 10%.",
 			"mitigated": False,
 			"mitigant": None
 		},
         {
-            "exception_id": "CP.EX26",
+            "exception_id": "CP.EX.26",
 			"applies": False,
 			"description": None,
 			"mitigated": False,
@@ -526,7 +532,7 @@ ASSESSMENT_BARCLAYS = {
 			"page_end": 6
 		},
 		{
-			"excerpt": "Material expansion In relation to Thermal Coal Power, production refers to an investment to (i) extend the unabated operating lifetime of existing thermal coal power plants including captives or (ii) increase net operational thermal power capacity, including captives, by more than 10% measure from a baseline of maximum capacity for preceding 3 years reported.",
+			"excerpt": "Material expansion In relation to Thermal Coal Mining, refers to an increase in annual tonnage of thermal coal extracted from existing thermal coal mines, including captives, by more than 20%, measured from a baseline of maximum p.a. tonnage for preceding 3 years reported. In relation to Thermal Coal Power, production refers to an investment to (i) extend the unabated operating lifetime of existing thermal coal power plants including captives or (ii) increase net operational thermal power capacity, including captives, by more than 10% measure from a baseline of maximum capacity for preceding 3 years reported. Material expansion in such cases relates to absolute global increases rather than increases for an entity or Group as a result of mergers or acquisitions.",
 			"document_name": "Climate change statement (Feb 2024)",
 			"page_start": 11,
 			"page_end": 11

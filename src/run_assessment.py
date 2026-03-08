@@ -1,21 +1,29 @@
-# Assessment parameters
-COMMITMENT_ID = "CP.1"
-PDF_SOURCE = "policies/ABN/Exclusion list (Mar 2021).pdf"
-
-# Run config
-APPROACH = "two_step" # Choose from "single_step", "two_step_simple", "two_step"
-MODEL_NAME = "gpt-4.1"
-POLICY_DEBUG = False  # Set to True to print policy pages
-INPUT_DEBUG = False   # Set to True to print other inputs
-INTERACTIVE_MODE = False  # Set to True to manually select and edit commitment references (not applicable for single_step)
-TO_EXCEL = True  # Set to True to export two_step results to Excel
-
-import pandas as pd
+import argparse
 from openpyxl import load_workbook
 from config import EXCEL_PATH, EXCEL_SHEET
 from utils import flatten_assessment
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run a policy commitment assessment.")
+    parser.add_argument("--commitment-id", "-c", required=True, help="Commitment ID to assess (e.g. CP.1)")
+    parser.add_argument("--pdf-source", "-p", required=True, help="Path to the policy PDF file")
+    parser.add_argument("--approach", "-a", default="two_step_simple", choices=["single_step", "two_step_simple", "two_step"], help="Assessment approach (default: two_step_simple)")
+    parser.add_argument("--model", "-m", default="gpt-4o", help="Model name to use (default: gpt-4o)")
+    parser.add_argument("--policy-debug", action="store_true", help="Print policy pages for debugging")
+    parser.add_argument("--input-debug", action="store_true", help="Print other inputs for debugging")
+    parser.add_argument("--interactive", action="store_true", help="Manually select and edit commitment references (not applicable for single_step)")
+    parser.add_argument("--to-excel", action="store_true", help="Export two_step results to Excel")
+    args = parser.parse_args()
+
+    COMMITMENT_ID = args.commitment_id
+    PDF_SOURCE = args.pdf_source
+    APPROACH = args.approach
+    MODEL_NAME = args.model
+    POLICY_DEBUG = args.policy_debug
+    INPUT_DEBUG = args.input_debug
+    INTERACTIVE_MODE = args.interactive
+    TO_EXCEL = args.to_excel
+
     print(f"\n{'='*80}")
     print(f"Running assessment with approach: {APPROACH.upper()}")
     print(f"Commitment: {COMMITMENT_ID}")
@@ -102,5 +110,3 @@ if __name__ == "__main__":
             interactive_mode=INTERACTIVE_MODE
         )
 
-    else:
-        raise ValueError(f"Unknown approach: {APPROACH}. Must be 'single_step', 'two_step_simple', or 'two_step'")
