@@ -15,6 +15,9 @@ Thumbs.db
 # local environment variables
 .env
 
+# Generated RAG pipeline data
+data/rag/
+
 # Claude Code configuration
 .claude/
 CLAUDE.md
