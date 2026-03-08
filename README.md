@@ -10,6 +10,8 @@ Three assessment approaches involving one or multiple API calls are currently be
 
 The tool is still under active development. This prototype focuses on a subset of assessment criteria related to thermal coal power, with additional themes (e.g., coal mining, oil & gas) planned for future iterations following the initial testing phase.
 
+A RAG-based retrieval approach is being explored in the [`rag-workflow-eval`](../../tree/rag-workflow-eval) branch, where policy documents are chunked, embedded, and stored in a vector database to enable semantic retrieval before assessment.
+
 ## Project Structure
 
 ```
@@ -89,16 +91,24 @@ The tool also returns total tokens used separately.
 
 ## Usage
 
-## Configuration Options
+### Run the assessment
 
-In `src\\run_assessment.py`:
-- `COMMITMENT_ID`: Which commitment to assess
-- `PDF_SOURCE`: Path to policy PDF
-- `APPROACH`: Assessment approach
-- `MODEL_NAME`: OpenAI model (e.g., "gpt-4o", "gpt-4.1")
-- `POLICY_DEBUG`: Print policy pages for debugging
-- `INPUT_DEBUG`: Print input prompts for debugging
-- `INTERACTIVE_MODE`: Enable manual reference selection (not applicable for single step approach)
+```bash
+python src/run_assessment.py --commitment-id CP.1 --pdf-source policies/ABN/policy.pdf
+```
+
+#### CLI Options
+
+| Flag | Short | Default | Description |
+|------|-------|---------|-------------|
+| `--commitment-id` | `-c` | *(required)* | Commitment ID to assess (e.g. `CP.1`) |
+| `--pdf-source` | `-p` | *(required)* | Path to the policy PDF |
+| `--approach` | `-a` | `two_step_simple` | Assessment approach: `single_step`, `two_step_simple`, `two_step` |
+| `--model` | `-m` | `gpt-4o` | OpenAI model name |
+| `--policy-debug` | | off | Print extracted policy pages |
+| `--input-debug` | | off | Print other inputs |
+| `--interactive` | | off | Manually select/edit commitment references (not applicable for `single_step`) |
+| `--to-excel` | | off | Export `two_step` results to Excel |
 
 ### Assessment Approaches
 
@@ -116,17 +126,11 @@ In `src\\run_assessment.py`:
 
 ### Interactive Mode
 
-When `INTERACTIVE_MODE = True`, you can:
+When `--interactive` is set, you can:
 - Review extracted policy references
 - Select which references to include in the final assessment
 - Edit reference text before processing
 - Skip irrelevant references
-
-### Run the assessment
-
-```bash
-python src/run_assessment.py
-```
 
 ### Running Individual Modules
 
