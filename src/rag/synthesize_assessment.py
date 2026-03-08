@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# CONFIG — edit BANK_IDS to control which banks get synthesis runs
+# CONFIG
 # ---------------------------------------------------------------------------
 BANK_IDS = ["ABN", "HSBC", "BBVA", "Barclays"]
 COMMITMENT_ID = "CP.1"
@@ -34,7 +34,6 @@ def main() -> None:
     data_dir = Path(DATA_DIR)
 
     for bank_id in BANK_IDS:
-        # Input: retrieval JSON from Step 4
         retrieval_path = data_dir / f"retrieval_{bank_id.lower()}_cp1.json"
         if not retrieval_path.exists():
             print(f"  Skipping {bank_id}: {retrieval_path} not found")

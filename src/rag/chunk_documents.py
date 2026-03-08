@@ -14,7 +14,7 @@ PDFS = [
     "policies/Barclays/Climate change statement (Feb 2024).pdf",
 ]
 OUTPUT = "data/rag/chunks.jsonl"
-SECTION_TAGGING = True  # False = no section_type metadata (baseline), True = keyword-based tagging
+SECTION_TAGGING = True
 # ---------------------------------------------------------------------------
 
 SRC_DIR = Path(__file__).resolve().parents[1]
@@ -63,7 +63,6 @@ def main() -> None:
     write_jsonl(output_path, all_chunks)
 
     total_tokens = sum(chunk["token_count"] for chunk in all_chunks)
-    # Show section_type distribution when tagging is enabled
     if SECTION_TAGGING:
         from collections import Counter
         section_counts = Counter(c["section_type"] for c in all_chunks)

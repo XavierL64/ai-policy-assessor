@@ -1,10 +1,8 @@
 """
 Step 5 prompt components for RAG synthesis.
 
-This prompt is intentionally different from the non-RAG single-step prompt:
-- Input evidence is retrieved chunks only (not full policy pages).
-- Grounding rule is strict: if evidence is missing/ambiguous, default to False.
-- Citations are programmatic: model returns only `chunk_id` evidence lists.
+Unlike the non-RAG single-step prompt, input evidence is retrieved chunks
+only, and citations are programmatic (model returns only chunk IDs).
 """
 
 from config import DESCRIPTION_LENGTH

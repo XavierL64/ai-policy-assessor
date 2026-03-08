@@ -1,18 +1,8 @@
 """
-Step 3 (RAG): store embedded chunks in local ChromaDB.
+Step 3: Store embedded chunks in local ChromaDB.
 
-WHAT this module does:
-- Reads embedding records (metadata + text + embedding vector).
-- Upserts them into a local persistent Chroma collection.
-
-WHY this module exists:
-- Step 4 retrieval needs an indexed vector store.
-- Chroma persistence keeps the index on disk across runs.
-
-Design decisions implemented:
-1) Single collection for all banks: `policy_chunks`
-2) Local persistence directory under `data/rag/chroma_db`
-3) Use upsert (not add) so reruns update existing records cleanly
+Uses a single shared collection (``policy_chunks``) for all banks, with
+bank-specific retrieval via metadata filters. Upserts for idempotent reruns.
 """
 
 from __future__ import annotations
@@ -27,37 +17,24 @@ def get_or_create_persistent_collection(
     persist_directory: str = "data/rag/chroma_db",
     collection_name: str = "policy_chunks",
 ) -> Collection:
-    """
-    Create or open a persistent Chroma collection.
-
-    Workflow position:
-    - Called once at startup of Step 3.
-    - Returns the collection handle used by batch upsert logic.
-    """
-    # PersistentClient stores index/data files on local disk.
+    """Create or open a persistent Chroma collection."""
     client = chromadb.PersistentClient(path=persist_directory)
-
-    # One shared collection for all banks.
-    # Bank-specific retrieval is done later via metadata filters (bank_id).
     collection = client.get_or_create_collection(name=collection_name)
     return collection
 
 
 def batch_records(records: list[dict], batch_size: int) -> Iterable[list[dict]]:
-    """
-    Yield fixed-size batches from a list of records.
-    """
+    """Yield fixed-size batches from a list of records."""
     for i in range(0, len(records), batch_size):
         yield records[i : i + batch_size]
 
 
 def build_chroma_id(record: dict) -> str:
     """
-    Build a stable Chroma record id.
+    Build a stable Chroma record ID.
 
-    Why not only `chunk_id`:
-    - `chunk_id` may collide across banks if filenames are reused.
-    - Prefixing with bank_id keeps IDs unique in a single shared collection.
+    Prefixes chunk_id with bank_id to avoid collisions across banks
+    when using a single shared collection.
     """
     bank_id = str(record.get("bank_id", "unknown_bank"))
     chunk_id = str(record.get("chunk_id", "unknown_chunk"))
@@ -69,14 +46,7 @@ def upsert_embedding_records(
     embedding_records: list[dict],
     batch_size: int = 100,
 ) -> int:
-    """
-    Upsert embedding records into Chroma and return number of records processed.
-
-    Input requirement per record:
-    - `embedding`: list[float]
-    - `text`: string document
-    - metadata fields such as bank_id/source_file/page/etc.
-    """
+    """Upsert embedding records into Chroma and return number of records processed."""
     if batch_size <= 0:
         raise ValueError("batch_size must be a positive integer.")
 
@@ -89,7 +59,6 @@ def upsert_embedding_records(
         metadatas: list[dict] = []
 
         for record in batch:
-            # Stable id for upsert behavior.
             ids.append(build_chroma_id(record))
 
             vector = record.get("embedding")
@@ -99,7 +68,6 @@ def upsert_embedding_records(
 
             documents.append(str(record.get("text", "")))
 
-            # Metadata kept small and query-friendly for filtered retrieval.
             metadatas.append(
                 {
                     "chunk_id": str(record.get("chunk_id", "")),
@@ -116,7 +84,6 @@ def upsert_embedding_records(
                 }
             )
 
-        # Decision 3: use upsert so repeated runs update existing ids.
         collection.upsert(
             ids=ids,
             embeddings=embeddings,

@@ -1,14 +1,9 @@
 """
-Step 5 (RAG): one-call synthesis with programmatic citations.
+Step 5: One-call synthesis with programmatic citations.
 
-WHAT this module does:
-- Feeds retrieved chunks to the model as a structured chunk catalog.
-- Asks the model to return evidence as chunk IDs only.
-- Resolves those IDs into citation objects in Python (deterministic post-processing).
-
-WHY this module exists:
-- Keeps one-call commitment+exceptions synthesis (single-step style).
-- Improves citation robustness by not relying on model-generated page/excerpt fields.
+Feeds retrieved chunks to the LLM as a structured catalog, asks the model
+to return evidence as chunk IDs only, then resolves those IDs into citation
+objects deterministically in Python.
 """
 
 from __future__ import annotations
@@ -27,12 +22,7 @@ MAX_EXCERPT_CHARS = 280
 
 
 def build_chunk_catalog(retrieval_results: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """
-    Build a compact, model-facing chunk catalog from retrieval results.
-
-    Each catalog item includes the ID the model must cite (`chunk_id`) and enough
-    context to reason over the text.
-    """
+    """Build a compact, model-facing chunk catalog from retrieval results."""
     catalog: list[dict[str, Any]] = []
     for result in retrieval_results:
         catalog.append(
@@ -47,9 +37,7 @@ def build_chunk_catalog(retrieval_results: list[dict[str, Any]]) -> list[dict[st
 
 
 def build_chunk_lookup(chunk_catalog: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
-    """
-    Build `chunk_id -> chunk record` mapping for fast citation resolution.
-    """
+    """Build chunk_id -> chunk record mapping for fast citation resolution."""
     return {
         item["chunk_id"]: item
         for item in chunk_catalog
@@ -58,9 +46,7 @@ def build_chunk_lookup(chunk_catalog: list[dict[str, Any]]) -> dict[str, dict[st
 
 
 def _sanitize_evidence_ids(candidate_ids: Any, valid_ids: set[str]) -> list[str]:
-    """
-    Keep only valid chunk IDs, preserving order and removing duplicates.
-    """
+    """Keep only valid chunk IDs, preserving order and removing duplicates."""
     if not isinstance(candidate_ids, list):
         return []
 
@@ -75,11 +61,7 @@ def _sanitize_evidence_ids(candidate_ids: Any, valid_ids: set[str]) -> list[str]
 
 
 def _build_excerpt(text: str, max_chars: int = MAX_EXCERPT_CHARS) -> str:
-    """
-    Build a deterministic short excerpt for citations.
-
-    This is programmatic (non-LLM): normalize whitespace, then clip.
-    """
+    """Build a deterministic short excerpt from chunk text."""
     cleaned = re.sub(r"\s+", " ", text).strip()
     if len(cleaned) <= max_chars:
         return cleaned
@@ -90,9 +72,7 @@ def _build_references_from_ids(
     evidence_ids: list[str],
     chunk_lookup: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """
-    Resolve evidence chunk IDs into citation objects.
-    """
+    """Resolve evidence chunk IDs into citation objects."""
     references: list[dict[str, Any]] = []
     for chunk_id in evidence_ids:
         chunk = chunk_lookup.get(chunk_id)
@@ -118,10 +98,8 @@ def resolve_model_output_with_programmatic_citations(
     """
     Convert model output (IDs only) into final assessment with resolved citations.
 
-    Output shape keeps:
-    - commitment / exceptions
-    - evidence IDs chosen by the model (validated)
-    - references resolved by Python from chunk metadata/text
+    Validates evidence IDs against the chunk catalog and builds reference
+    objects with excerpts and page numbers.
     """
     valid_ids = set(chunk_lookup.keys())
 
@@ -141,7 +119,6 @@ def resolve_model_output_with_programmatic_citations(
             mitigated = bool(item.get("mitigated", False))
             evidence_ids = _sanitize_evidence_ids(item.get("evidence_chunk_ids", []), valid_ids)
 
-            # Only positive findings contribute to final references list.
             if applies or mitigated:
                 for chunk_id in evidence_ids:
                     if chunk_id not in positive_exception_evidence_ids:
@@ -158,8 +135,7 @@ def resolve_model_output_with_programmatic_citations(
                 }
             )
 
-    # Build reference IDs in deterministic order:
-    # commitment evidence first (if commitment true), then exception evidence.
+    # Reference IDs: commitment evidence first, then exception evidence.
     reference_ids: list[str] = []
     if commitment:
         reference_ids.extend(commitment_ids)
@@ -183,12 +159,7 @@ def build_synthesis_user_input(
     exception_taxonomy: list[dict[str, Any]],
     chunk_catalog: list[dict[str, Any]],
 ) -> str:
-    """
-    Build user payload for synthesis call.
-
-    Important:
-    - We pass structured chunk catalog JSON so the model can cite IDs precisely.
-    """
+    """Build structured user payload for the synthesis LLM call."""
     commitment_description = commitment.get("commitment_description", "")
     commitment_guidelines = commitment.get("commitment_guidelines", "")
     commitment_examples = commitment.get("commitment_examples", "")
@@ -239,12 +210,9 @@ def synthesize_assessment_from_retrieval(
     exceptions_criteria_csv_path: str = "exceptions/exceptions_criteria.csv",
 ) -> tuple[dict[str, Any], dict[str, Any], int]:
     """
-    Run one-call synthesis from Step 4 retrieval payload.
+    Run one-call synthesis from a Step 4 retrieval payload.
 
-    Returns:
-    - raw model output (evidence IDs only)
-    - resolved assessment with programmatic citations
-    - synthesis token usage
+    Returns (raw_model_output, resolved_assessment, total_tokens_used).
     """
     commitment_id = retrieval_payload.get("commitment_id")
     if not commitment_id:

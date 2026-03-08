@@ -1,19 +1,8 @@
 """
-Step 2 (RAG): embed chunk text with OpenAI embeddings.
+Step 2: Embed chunk text with OpenAI embeddings.
 
-WHAT this module does:
-- Reads chunk records produced by Step 1.
-- Sends chunk `text` fields to OpenAI's embeddings endpoint in batches.
-- Returns enriched records that keep original metadata + embedding vectors.
-
-WHY this module exists:
-- Retrieval in later steps needs vector similarity search.
-- Embeddings convert unstructured text into numeric vectors we can index/query.
-
-Design decisions implemented here (as requested):
-1) Model: `text-embedding-3-small`
-2) Dimensions: full default dimensions (we do NOT pass `dimensions=...`)
-3) Output shape: one JSONL-ready record per chunk including its embedding vector
+Sends chunk text to OpenAI's embedding endpoint in batches and returns
+enriched records with the original metadata plus embedding vectors.
 """
 
 from __future__ import annotations
@@ -26,12 +15,7 @@ from openai import OpenAI
 
 
 def read_jsonl(path: Path) -> list[dict]:
-    """
-    Read a JSONL file into a list of dictionaries.
-
-    JSONL means "one JSON object per line".
-    This format is convenient for large pipelines and incremental re-processing.
-    """
+    """Read a JSONL file into a list of dictionaries."""
     records: list[dict] = []
     with path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -43,9 +27,7 @@ def read_jsonl(path: Path) -> list[dict]:
 
 
 def write_jsonl(path: Path, records: Iterable[dict]) -> None:
-    """
-    Write dictionaries to JSONL (one object per line).
-    """
+    """Write dictionaries to JSONL (one object per line)."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         for record in records:
@@ -53,13 +35,7 @@ def write_jsonl(path: Path, records: Iterable[dict]) -> None:
 
 
 def batch_records(records: list[dict], batch_size: int) -> Iterable[list[dict]]:
-    """
-    Yield fixed-size batches from a list of records.
-
-    Why batching:
-    - Reduces API round trips compared to one request per chunk.
-    - Keeps implementation simple while improving throughput.
-    """
+    """Yield fixed-size batches from a list of records."""
     for i in range(0, len(records), batch_size):
         yield records[i : i + batch_size]
 
@@ -73,14 +49,9 @@ def embed_chunk_records(
     """
     Embed chunk records and return enriched records.
 
-    Input requirement:
-    - Every record must contain a `text` field.
-
-    Output:
-    - Original metadata and text
-    - `embedding`: list[float]
-    - `embedding_model`: model used to embed
-    - `embedding_dimensions`: vector length (derived from API response)
+    Each input record must contain a ``text`` field. Output records include
+    original metadata plus ``embedding``, ``embedding_model``, and
+    ``embedding_dimensions``.
     """
     if batch_size <= 0:
         raise ValueError("batch_size must be a positive integer.")
@@ -90,21 +61,16 @@ def embed_chunk_records(
     for batch in batch_records(chunk_records, batch_size=batch_size):
         texts = [record.get("text", "") for record in batch]
 
-        # Decision 1: use `text-embedding-3-small`.
-        # Decision 2: keep full default dimensions by NOT passing `dimensions=...`.
         response = client.embeddings.create(
             model=model_name,
             input=texts,
         )
 
-        # The API returns one embedding per input text, indexed by `item.index`.
-        # We sort by index to guarantee alignment with our `batch` order.
+        # Sort by index to guarantee alignment with batch order.
         items = sorted(response.data, key=lambda item: item.index)
 
         for record, item in zip(batch, items):
             vector = item.embedding
-
-            # Keep metadata first for readability when scanning JSONL manually.
             output_record = {
                 "chunk_id": record.get("chunk_id"),
                 "bank_id": record.get("bank_id"),

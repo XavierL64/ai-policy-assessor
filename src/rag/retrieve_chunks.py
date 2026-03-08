@@ -25,7 +25,7 @@ PERSIST_DIR = "data/rag/chroma_db"
 COLLECTION = "policy_chunks"
 CHUNKS_JSONL = "data/rag/chunks.jsonl"
 OUTPUT_DIR = "data/rag"
-HYBRID_RETRIEVAL = True   # False = vector-only (baseline), True = BM25 + vector + RRF
+HYBRID_RETRIEVAL = True
 # ---------------------------------------------------------------------------
 
 SRC_DIR = Path(__file__).resolve().parents[1]
@@ -42,7 +42,6 @@ from utils import get_openai_client  # noqa: E402
 
 
 def main() -> None:
-    # Build query once — same commitment for all banks
     composite_query = build_commitment_retrieval_query(
         commitment_id=COMMITMENT_ID,
         criteria_csv_path=CRITERIA_CSV,
@@ -62,7 +61,6 @@ def main() -> None:
         collection_name=COLLECTION,
     )
 
-    # Load hybrid retrieval components only when enabled
     if HYBRID_RETRIEVAL:
         from rag.hybrid_retrieval import hybrid_retrieve, load_bank_chunks
 
@@ -75,10 +73,7 @@ def main() -> None:
     for bank_id in BANK_IDS:
 
         if HYBRID_RETRIEVAL:
-            # Load bank chunks from JSONL for BM25 search
             bank_chunks = load_bank_chunks(CHUNKS_JSONL, bank_id)
-
-            # Hybrid: vector + BM25 + RRF
             results = hybrid_retrieve(
                 query=composite_query,
                 query_embedding=query_embedding,
@@ -88,7 +83,6 @@ def main() -> None:
                 top_k=TOP_K,
             )
 
-            # Package results in the same format as vector-only retrieval
             retrieval = {
                 "bank_id_filter": bank_id,
                 "top_k": TOP_K,
@@ -113,7 +107,6 @@ def main() -> None:
                 ],
             }
         else:
-            # Vector-only: original Chroma query
             retrieval = query_chroma_for_bank(
                 collection=collection,
                 query_embedding=query_embedding,

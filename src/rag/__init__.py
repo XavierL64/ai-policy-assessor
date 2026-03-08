@@ -1,18 +1,6 @@
-"""
-Package exports for `rag`.
+"""Public API for the RAG pipeline package."""
 
-What `__init__.py` does here:
-- Marks this folder as a Python package.
-- Re-exports selected functions/constants from internal modules.
 
-Why re-export:
-- Consumers can import from one stable package path:
-    `from rag import chunk_pages_with_page_provenance, embed_chunk_records`
-  instead of importing from multiple files directly.
-- Keeps public API explicit through `__all__`.
-"""
-
-# Step 1 exports: chunking constants + helpers.
 from .chunking import (
     DEFAULT_CHUNK_OVERLAP_TOKENS,
     DEFAULT_CHUNK_SIZE_TOKENS,
@@ -21,8 +9,6 @@ from .chunking import (
     make_recursive_splitter,
     make_token_length_function,
 )
-
-# Step 2 exports: embedding I/O and embedding transform.
 from .embedding import embed_chunk_records, read_jsonl, write_jsonl
 from .vector_store import (
     build_chroma_id,
@@ -42,8 +28,6 @@ from .synthesis import (
     synthesize_assessment_from_retrieval,
 )
 
-# Public API surface of this package.
-# Only names listed here are intended for external imports.
 __all__ = [
     "DEFAULT_CHUNK_OVERLAP_TOKENS",
     "DEFAULT_CHUNK_SIZE_TOKENS",

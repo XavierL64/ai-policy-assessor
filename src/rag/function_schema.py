@@ -1,10 +1,8 @@
 """
-RAG-specific synthesis schema for programmatic citations.
+RAG-specific function-calling schema for programmatic citations.
 
-Key difference vs `single_step/function_schema.py`:
-- The model does NOT generate free-form references.
-- The model must return evidence as `chunk_id` lists.
-- Python code resolves those IDs into citation objects after the call.
+The model returns evidence as chunk ID lists (not free-form references),
+which Python resolves into citation objects after the call.
 """
 
 tools = [
