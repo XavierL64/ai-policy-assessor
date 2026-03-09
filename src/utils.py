@@ -3,6 +3,7 @@ import unicodedata
 import re
 import os
 import fitz
+import pymupdf4llm
 from dotenv import load_dotenv
 from openai import OpenAI, RateLimitError
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
@@ -191,25 +192,158 @@ def normalize_text(text):
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
-def load_pdf_pages(path):
+def _light_normalize(text):
+    """Normalize line endings and unicode without destroying markdown structure."""
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = unicodedata.normalize("NFKC", text)
+    return text.strip()
+
+
+# Superscript digits and their plain equivalents
+_SUPERSCRIPT_MAP = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
+# Pattern for footnote markers in body text (superscript or bracketed digits)
+_BODY_MARKER_RE = re.compile(r"([⁰¹²³⁴⁵⁶⁷⁸⁹]+)")
+# Pattern for footnote definitions at page bottom: starts with a digit (or superscript), followed by text
+_FOOTNOTE_DEF_RE = re.compile(
+    r"^[⁰¹²³⁴⁵⁶⁷⁸⁹]+[\s.)\-:]+(.+)|^(\d{1,2})[\s.)\-:]+(.+)",
+    re.MULTILINE,
+)
+
+
+def _extract_footnotes(text):
     """
-    Load a PDF and return a list of pages.
+    Split page text into body and footnote definitions.
+    Returns (body, footnotes_dict) where footnotes_dict maps marker number (str) to footnote text.
+    """
+    # Split on horizontal rule (common pymupdf4llm separator before footnotes)
+    parts = re.split(r"\n-{3,}\n|\n_{3,}\n|\n\*{3,}\n", text)
+
+    if len(parts) < 2:
+        return text, {}
+
+    body = parts[0]
+    footer = "\n".join(parts[1:])
+
+    footnotes = {}
+    lines = footer.strip().split("\n")
+    current_marker = None
+    current_text = []
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            if current_marker:
+                current_text.append("")
+            continue
+
+        # Try superscript marker first
+        sup_match = re.match(r"^([⁰¹²³⁴⁵⁶⁷⁸⁹]+)[\s.)\-:]*(.*)", line)
+        # Then plain digit marker
+        digit_match = re.match(r"^(\d{1,2})[\s.)\-:]+(.*)", line) if not sup_match else None
+
+        match = sup_match or digit_match
+        if match:
+            # Save previous footnote
+            if current_marker:
+                footnotes[current_marker] = " ".join(current_text).strip()
+            marker = match.group(1).translate(_SUPERSCRIPT_MAP)
+            current_marker = marker
+            current_text = [match.group(2) if sup_match else match.group(2)]
+        elif current_marker:
+            # Continuation line of current footnote
+            current_text.append(line)
+
+    if current_marker:
+        footnotes[current_marker] = " ".join(current_text).strip()
+
+    return body, footnotes
+
+
+def _inline_footnotes(body, footnotes):
+    """Replace footnote markers in body with inlined footnote text."""
+    def replace_marker(match):
+        marker = match.group(1).translate(_SUPERSCRIPT_MAP)
+        if marker in footnotes:
+            return f" [Footnote: {footnotes[marker]}]"
+        return match.group(0)  # leave unmatched markers as-is
+
+    return _BODY_MARKER_RE.sub(replace_marker, body)
+
+
+def _process_footnotes(pages):
+    """
+    Inline footnotes into body text across all pages.
+    Uses cross-page lookahead for unmatched markers.
+    """
+    # First pass: extract body and footnotes per page
+    parsed = []
+    for page in pages:
+        body, footnotes = _extract_footnotes(page["text"])
+        parsed.append({"body": body, "footnotes": footnotes, "page": page})
+
+    # Second pass: inline with cross-page lookahead
+    for i, entry in enumerate(parsed):
+        # Find unmatched markers in this page's body
+        markers_in_body = {
+            m.translate(_SUPERSCRIPT_MAP) for m in _BODY_MARKER_RE.findall(entry["body"])
+        }
+        unmatched = markers_in_body - set(entry["footnotes"].keys())
+
+        # Look ahead to next page for unmatched markers
+        if unmatched and i + 1 < len(parsed):
+            next_footnotes = parsed[i + 1]["footnotes"]
+            for marker in unmatched:
+                if marker in next_footnotes:
+                    entry["footnotes"][marker] = next_footnotes[marker]
+
+        # Inline footnotes into body
+        text = _inline_footnotes(entry["body"], entry["footnotes"])
+
+        # Annotate any still-unmatched markers
+        remaining_markers = {
+            m.translate(_SUPERSCRIPT_MAP) for m in _BODY_MARKER_RE.findall(text)
+            if m.translate(_SUPERSCRIPT_MAP) not in entry["footnotes"]
+        }
+        if remaining_markers:
+            for m in remaining_markers:
+                # Find the superscript version in text and annotate
+                for sup in _BODY_MARKER_RE.findall(text):
+                    if sup.translate(_SUPERSCRIPT_MAP) == m:
+                        text = text.replace(sup, f"{sup} [Footnote not found on this page]", 1)
+                        break
+
+        entry["page"]["text"] = text
+
+    return [entry["page"] for entry in parsed]
+
+
+def load_pdf_pages(path, inline_footnotes=True):
+    """
+    Load a PDF and return a list of pages as structured markdown.
     Each page is a dict with:
       - document_name: the PDF file name (without extension)
       - page_number: 1-based page number
-      - text: normalized text only (cleaned for verification)
+      - text: markdown-formatted text (tables, headings, bold/italic preserved)
+
+    Args:
+        path: path to PDF file
+        inline_footnotes: if True, inline footnote text at point of reference
     """
     docname = os.path.splitext(os.path.basename(path))[0]
-    pages = []
 
-    with fitz.open(path) as pdf:
-        for i, page in enumerate(pdf, start=1):
-            raw_text = page.get_text("text") or ""
-            pages.append({
-                "document_name": docname,
-                "page_number": i,
-                "text": normalize_text(raw_text)
-            })
+    md_pages = pymupdf4llm.to_markdown(path, page_chunks=True)
+
+    pages = []
+    for i, md_page in enumerate(md_pages, start=1):
+        md_text = md_page.get("text", "") or ""
+        pages.append({
+            "document_name": docname,
+            "page_number": i,
+            "text": _light_normalize(md_text)
+        })
+
+    if inline_footnotes:
+        pages = _process_footnotes(pages)
 
     return pages
 
