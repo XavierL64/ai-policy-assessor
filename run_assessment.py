@@ -3,7 +3,8 @@ from openpyxl import load_workbook
 from config import EXCEL_PATH, EXCEL_SHEET
 from utils import flatten_assessment
 
-if __name__ == "__main__":
+
+def main():
     parser = argparse.ArgumentParser(description="Run a policy commitment assessment.")
     parser.add_argument("--commitment-id", "-c", required=True, help="Commitment ID to assess (e.g. CP.1)")
     parser.add_argument("--pdf-source", "-p", required=True, help="Path to the policy PDF file")
@@ -110,3 +111,6 @@ if __name__ == "__main__":
             interactive_mode=INTERACTIVE_MODE
         )
 
+
+if __name__ == "__main__":
+    main()

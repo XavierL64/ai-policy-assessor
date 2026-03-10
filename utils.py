@@ -192,6 +192,7 @@ def normalize_text(text):
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
+## alternative nomalizer function for structured markdown extraction
 def _light_normalize(text):
     """Normalize line endings and unicode without destroying markdown structure."""
     text = text.replace("\r\n", "\n").replace("\r", "\n")
@@ -203,12 +204,6 @@ def _light_normalize(text):
 _SUPERSCRIPT_MAP = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹", "0123456789")
 # Pattern for footnote markers in body text (superscript or bracketed digits)
 _BODY_MARKER_RE = re.compile(r"([⁰¹²³⁴⁵⁶⁷⁸⁹]+)")
-# Pattern for footnote definitions at page bottom: starts with a digit (or superscript), followed by text
-_FOOTNOTE_DEF_RE = re.compile(
-    r"^[⁰¹²³⁴⁵⁶⁷⁸⁹]+[\s.)\-:]+(.+)|^(\d{1,2})[\s.)\-:]+(.+)",
-    re.MULTILINE,
-)
-
 
 def _extract_footnotes(text):
     """
@@ -218,11 +213,20 @@ def _extract_footnotes(text):
     # Split on horizontal rule (common pymupdf4llm separator before footnotes)
     parts = re.split(r"\n-{3,}\n|\n_{3,}\n|\n\*{3,}\n", text)
 
-    if len(parts) < 2:
-        return text, {}
-
-    body = parts[0]
-    footer = "\n".join(parts[1:])
+    if len(parts) >= 2:
+        body = parts[0]
+        footer = "\n".join(parts[1:])
+    else:
+        # Fallback: check the last paragraph block for superscript footnote markers
+        last_break = text.rfind("\n\n")
+        if last_break == -1:
+            return text, {}
+        last_block = text[last_break + 2:]
+        first_line = last_block.strip().split("\n")[0].strip() if last_block.strip() else ""
+        if not re.match(r"^[⁰¹²³⁴⁵⁶⁷⁸⁹]+[\s.)\-:]", first_line):
+            return text, {}
+        body = text[:last_break]
+        footer = last_block
 
     footnotes = {}
     lines = footer.strip().split("\n")
