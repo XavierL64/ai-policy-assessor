@@ -1,8 +1,6 @@
 """
-Step 3 CLI: store embeddings in local ChromaDB.
+Step 3: store embeddings in local ChromaDB.
 
-Run from project root:
-    python src/rag/store_vectors.py
 """
 
 from __future__ import annotations

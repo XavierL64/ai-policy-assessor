@@ -1,8 +1,6 @@
 """
-Step 4 CLI: retrieve relevant chunks for each bank + commitment from Chroma.
+Step 4: retrieve relevant chunks for each bank + commitment from Chroma.
 
-Run from project root:
-    python src/rag/retrieve_chunks.py
 """
 
 from __future__ import annotations

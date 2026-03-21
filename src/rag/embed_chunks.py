@@ -1,8 +1,5 @@
 """
-Step 2 CLI: embed chunks with OpenAI and write JSONL output.
-
-Run from project root:
-    python src/rag/embed_chunks.py
+Step 2: embed chunks with OpenAI and write JSONL output.
 """
 
 from __future__ import annotations

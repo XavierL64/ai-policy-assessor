@@ -1,8 +1,5 @@
 """
-Step 5 CLI: synthesize final assessment from retrieved chunks for each bank.
-
-Run from project root:
-    python src/rag/synthesize_assessment.py
+Step 5: synthesize final assessment from retrieved chunks for each bank.
 """
 
 from __future__ import annotations
