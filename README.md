@@ -16,18 +16,17 @@ A RAG-based retrieval approach is being explored in the [`rag-workflow-eval`](..
 
 ```
 ai-policy-assessor/
-|- src/
-|  |- single_step/           # Single API call assessment
-|  |- two_step/              # Two-step assessment (commitment + exceptions (multiple API calls))
-|  |- two_step_simple/       # Two-step assessment (commitment + exceptions)
-|  |- examples/              # Sample outputs and assessment examples
-|  |- utils.py               # Shared utilities
-|  |- config.py              # Configuration and assessment date
-|  |- run_assessment.py      # Main entry point
+|- single_step/              # Single API call assessment
+|- two_step/                 # Two-step assessment (commitment + exceptions (multiple API calls))
+|- two_step_simple/          # Two-step assessment (commitment + exceptions)
+|- examples/                 # Sample outputs and assessment examples
 |- policies/                 # Bank policy PDFs (organized by bank)
 |- criteria/                 # Commitment definitions and criteria
 |- exceptions/               # Exception taxonomy and criteria
 |- data/                     # Output data and results
+|- utils.py                  # Shared utilities
+|- config.py                 # Configuration and assessment date
+|- run_assessment.py         # Main entry point
 |- requirements.txt          # Python dependencies
 ```
 
@@ -94,7 +93,7 @@ The tool also returns total tokens used separately.
 ### Run the assessment
 
 ```bash
-python src/run_assessment.py --commitment-id CP.1 --pdf-source policies/ABN/policy.pdf
+python run_assessment.py --commitment-id CP.1 --pdf-source policies/ABN/policy.pdf
 ```
 
 #### CLI Options
@@ -138,13 +137,13 @@ You can also run assessment approaches directly:
 
 ```bash
 # Run single-step assessment
-python src/single_step/main.py
+python single_step/main.py
 
 # Run two-step assessment
-python src/two_step/main.py
+python two_step/main.py
 
 # Run two-step simple assessment
-python src/two_step_simple/main.py
+python two_step_simple/main.py
 ```
 
 ## PDF Text Extraction Strategy
