@@ -1,0 +1,27 @@
+name: CI
+
+# When to run: on every push and pull request to main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the code
+      - uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # 3. Install dependencies
+      - run: pip install -r requirements.txt
+
+      # 4. Run tests
+      - run: python -m pytest test_app.py -v
